@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.graduation.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.graduation.model.Vote;
 
@@ -8,6 +9,8 @@ import java.util.List;
 
 @Repository
 public class DataJpaVoteRepository implements VoteRepository {
+
+    private static final Sort SORT_NAME_ID = new Sort(Sort.Direction.ASC, "name", "id");
 
     private final CrudVoteRepository crudVoteRepository;
     private final CrudRestaurantRepository restaurantRepository;
@@ -41,7 +44,12 @@ public class DataJpaVoteRepository implements VoteRepository {
 
     @Override
     public Vote get(int id) {
-        return crudVoteRepository.get(id).orElse(null);
+        return crudVoteRepository.findById(id).orElse(null);
+    }
+
+    @Override
+    public List<Vote> getAll(){
+        return crudVoteRepository.findAll(SORT_NAME_ID);
     }
 
     @Override

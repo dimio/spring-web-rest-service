@@ -1,11 +1,13 @@
 package ru.javawebinar.topjava.graduation.repository;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
+import ru.javawebinar.topjava.graduation.model.User;
 import ru.javawebinar.topjava.graduation.model.Vote;
 
 import java.util.Date;
@@ -24,8 +26,13 @@ public interface CrudVoteRepository extends JpaRepository<Vote, Integer> {
     @Query("DELETE FROM Vote v WHERE v.id=:id")
     int delete(@Param("id") int id);
 
+    @Override
     @EntityGraph(attributePaths = {"restaurant", "user"}, type = EntityGraph.EntityGraphType.LOAD)
-    Optional<Vote> get(Integer id);
+    Optional<Vote> findById(Integer id);
+
+    @Override
+    @EntityGraph(attributePaths = {"restaurant", "user"}, type = EntityGraph.EntityGraphType.LOAD)
+    List<Vote> findAll(Sort sort);
 
     @EntityGraph(attributePaths = {"restaurant"}, type = EntityGraph.EntityGraphType.LOAD)
     //    @Query("SELECT v FROM Vote v WHERE v.user.id=:userId ORDER BY v.id DESC")

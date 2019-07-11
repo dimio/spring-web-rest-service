@@ -17,6 +17,8 @@ public interface VoteRepository {
 
     Vote get(int id);
 
+    List<Vote> getAll();
+
     List<Vote> getAllByUserId(int userId);
 
     List<Vote> getByUserIdBetweenDate(int userId, Date dateFrom, Date dateTo);

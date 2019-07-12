@@ -4,10 +4,14 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
+import org.hibernate.validator.constraints.Range;
+import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "menus")
@@ -19,17 +23,24 @@ public class Menu extends AbstractBaseEntity {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
-    @Column(name = "added", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
+    @Column(name = "added", nullable = false, columnDefinition = "timestamp default now()")
     @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Date added = new Date();
+    private LocalDate added;
 
+    @NotBlank
+    @Size(min = 1)
+    @SafeHtml
     @Column(name = "dishes", nullable = false)
     private String dishes;
 
+    @NotNull
+    @Range(min = 0)
     @Column(name = "price_int", nullable = false)
     private Long priceInt;
 
+    @NotNull
+    @Range(min = 0)
     @Column(name = "price_fract", nullable = false)
     private Long priceFract;
 
@@ -40,7 +51,7 @@ public class Menu extends AbstractBaseEntity {
         this(m.getId(), m.getAdded(), m.getDishes(), m.getPriceInt(), m.getPriceFract(), m.getRestaurant());
     }
 
-    public Menu(Integer id, @NotNull Date added, String dishes, Long priceInt, Long priceFract, Restaurant restaurant) {
+    public Menu(Integer id, LocalDate added, String dishes, Long priceInt, Long priceFract, Restaurant restaurant) {
         super(id);
         this.restaurant = restaurant;
         this.added = added;
@@ -57,11 +68,11 @@ public class Menu extends AbstractBaseEntity {
         this.restaurant = restaurant;
     }
 
-    public Date getAdded() {
+    public LocalDate getAdded() {
         return added;
     }
 
-    public void setAdded(Date added) {
+    public void setAdded(LocalDate added) {
         this.added = added;
     }
 

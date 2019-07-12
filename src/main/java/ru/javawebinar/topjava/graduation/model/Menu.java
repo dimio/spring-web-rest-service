@@ -88,4 +88,17 @@ public class Menu extends AbstractBaseEntity {
     public void setPriceFract(Long priceFract) {
         this.priceFract = priceFract;
     }
+
+    @Override
+    public String toString() {
+        return "Menu{" +
+            "id=" + id +
+            ", restaurant=" + restaurant +
+            ", added=" + added +
+            ", dishes='" + dishes + '\'' +
+            ", priceInt=" + priceInt +
+            ", priceFract=" + priceFract +
+
+            '}';
+    }
 }

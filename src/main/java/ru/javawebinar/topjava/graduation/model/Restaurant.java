@@ -11,7 +11,7 @@ public class Restaurant extends AbstractNamedEntity {
 
     @Column
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    @OrderBy("voteDate DESC")
+    @OrderBy("dateTime DESC")
     @BatchSize(size = 200)
     private List<Vote> votes;
 
@@ -53,8 +53,8 @@ public class Restaurant extends AbstractNamedEntity {
     @Override
     public String toString() {
         return "Restaurant{" +
-            ", id=" + id +
-            "name='" + name + '\'' +
+            "id=" + id +
+            ", name='" + name + '\'' +
             ", votes=" + votes +
             ", lunchMenus=" + lunchMenus +
             '}';

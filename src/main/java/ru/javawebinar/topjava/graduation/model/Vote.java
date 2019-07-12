@@ -6,7 +6,7 @@ import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time", "restaurant_id"}, name = "votes_unique_ucd_idx")})
@@ -20,7 +20,7 @@ public class Vote extends AbstractBaseEntity {
     @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
     @NotNull
     //    TODO @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private Date voteDate = new Date();
+    private LocalDateTime dateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -30,11 +30,11 @@ public class Vote extends AbstractBaseEntity {
     public Vote() {
     }
 
-    public Vote(Integer id, Date voteDate, Restaurant restaurant, User user) {
+    public Vote(Integer id, LocalDateTime dateTime, Restaurant restaurant, User user) {
         this.id = id;
         this.restaurant = restaurant;
         this.user = user;
-        this.voteDate = voteDate;
+        this.dateTime = dateTime;
     }
 
     public Integer getId() {
@@ -61,12 +61,21 @@ public class Vote extends AbstractBaseEntity {
         this.user = user;
     }
 
-    public Date getVoteDate() {
-        return voteDate;
+    public LocalDateTime getDateTime() {
+        return dateTime;
     }
 
-    public void setVoteDate(Date voteDate) {
-        this.voteDate = voteDate;
+    public void setDateTime(LocalDateTime dateTime) {
+        this.dateTime = dateTime;
     }
 
+    @Override
+    public String toString() {
+        return "Vote{" +
+            "id=" + id +
+            ", user=" + user +
+            ", dateTime=" + dateTime +
+            ", restaurant=" + restaurant +
+            '}';
+    }
 }

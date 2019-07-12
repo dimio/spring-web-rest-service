@@ -1,9 +1,12 @@
+-- noinspection SqlWithoutWhereForFile
+
 DELETE FROM user_roles;
 DELETE FROM votes;
 DELETE FROM users;
 DELETE FROM restaurants;
 DELETE FROM menus;
 ALTER SEQUENCE global_seq RESTART WITH 100000;
+ALTER SEQUENCE vote_seq RESTART WITH 1000;
 
 INSERT INTO users (name, email, password)
 VALUES ('User', 'user@yandex.ru', '{noop}password'),

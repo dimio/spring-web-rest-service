@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.graduation.repository;
 
-import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -8,8 +7,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.graduation.model.Menu;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -33,7 +31,7 @@ public interface CrudMenuRepository extends JpaRepository<Menu, Integer> {
     List<Menu> getAllByRestaurant_IdOrderByAddedDesc(Integer restaurantId);
 
     //getBetween
-    List<Menu> getByRestaurant_IdAndAddedBetweenOrderByAddedDesc(Integer restaurantId, Date startDate, Date endDate);
+    List<Menu> getByRestaurant_IdAndAddedBetweenOrderByAddedDesc(Integer restaurantId, LocalDate startDate, LocalDate endDate);
 
     //getWithRestaurant
     @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant WHERE m.id=:id AND m.restaurant.id=:restaurantId")

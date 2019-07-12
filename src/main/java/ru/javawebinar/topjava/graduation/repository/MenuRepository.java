@@ -2,8 +2,7 @@ package ru.javawebinar.topjava.graduation.repository;
 
 import ru.javawebinar.topjava.graduation.model.Menu;
 
-import java.time.LocalDateTime;
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 public interface MenuRepository {
@@ -21,7 +20,7 @@ public interface MenuRepository {
     List<Menu> getAll(int restaurantId);
 
     // ORDERED dateTime desc
-    List<Menu> getBetween(int restaurantId, Date startDate, Date endDate);
+    List<Menu> getBetween(int restaurantId, LocalDate startDate, LocalDate endDate);
 
     default Menu getWithRestaurant(int id, int restaurantId) {
         throw new UnsupportedOperationException();

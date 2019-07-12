@@ -3,7 +3,7 @@ package ru.javawebinar.topjava.graduation.repository;
 import org.springframework.stereotype.Repository;
 import ru.javawebinar.topjava.graduation.model.Menu;
 
-import java.util.Date;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -44,7 +44,7 @@ public class DataJpaMenuRepository implements MenuRepository {
     }
 
     @Override
-    public List<Menu> getBetween(int restaurantId, Date startDate, Date endDate) {
+    public List<Menu> getBetween(int restaurantId, LocalDate startDate, LocalDate endDate) {
         return crudMenuRepository.getByRestaurant_IdAndAddedBetweenOrderByAddedDesc(
             restaurantId, startDate, endDate
         );

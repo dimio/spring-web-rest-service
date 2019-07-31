@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.graduation.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.OnDelete;
@@ -14,13 +15,14 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "menus")
+@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"added", "name", "restaurant_id"}, name = "menus_unique_added_name_restaurant_idx")})
 @BatchSize(size = 200)
-public class Menu extends AbstractBaseEntity {
+public class Menu extends AbstractNamedEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @JsonBackReference
     private Restaurant restaurant;
 
     @NotNull
@@ -48,11 +50,11 @@ public class Menu extends AbstractBaseEntity {
     }
 
     public Menu(Menu m) {
-        this(m.getId(), m.getAdded(), m.getDishes(), m.getPriceInt(), m.getPriceFract(), m.getRestaurant());
+        this(m.getId(), m.getName(), m.getAdded(), m.getDishes(), m.getPriceInt(), m.getPriceFract(), m.getRestaurant());
     }
 
-    public Menu(Integer id, LocalDate added, String dishes, Long priceInt, Long priceFract, Restaurant restaurant) {
-        super(id);
+    public Menu(Integer id, String name, LocalDate added, String dishes, Long priceInt, Long priceFract, Restaurant restaurant) {
+        super(id, name);
         this.restaurant = restaurant;
         this.added = added;
         this.dishes = dishes;

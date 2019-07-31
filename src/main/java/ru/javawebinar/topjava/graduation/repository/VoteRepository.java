@@ -1,29 +1,31 @@
 package ru.javawebinar.topjava.graduation.repository;
 
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.graduation.model.Vote;
 
 import java.time.LocalDateTime;
 import java.util.List;
 
-public interface VoteRepository {
+@Repository
+@Transactional(readOnly = true)
+public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
-    Vote save(Vote vote, int restaurantId, int userId);
+    @Override
+    @Transactional
+    Vote save(Vote vote);
 
-    Vote update(Vote vote, int restaurantId);
+    // find... vs get... ? https://stackoverflow.com/a/24486114/11130103
+    List<Vote> findByUserId(int userId);
 
-    boolean delete(int id, int userId);
+    Vote findByUserIdAndDateTime(int userId, LocalDateTime dateTime);
 
-    Vote get(int id, int userId);
+    List<Vote> findByRestaurantId(int restaurantId);
 
-    List<Vote> getAll();
+    Vote findByRestaurantIdAndDateTime(int restaurantId, LocalDateTime dateTime);
 
-    List<Vote> getAllByUserId(int userId);
-
-    List<Vote> getByUserIdBetween(int userId, LocalDateTime dateFrom, LocalDateTime dateTo);
-
-    List<Vote> getAllByRestaurantId(int restaurantId);
+    List<Vote> findByUserIdBetween(int userId, LocalDateTime dateFrom, LocalDateTime dateTo);
 
     List<Vote> getByRestaurantIdBetween(int restaurantId, LocalDateTime dateFrom, LocalDateTime dateTo);
-
-    List<Vote> getBetween(LocalDateTime dateFrom, LocalDateTime dateTo);
 }

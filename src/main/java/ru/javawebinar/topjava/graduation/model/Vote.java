@@ -15,19 +15,24 @@ public class Vote extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private User user;
-
-    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
-    @NotNull
-    //    TODO @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDateTime dateTime;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Restaurant restaurant;
 
+    @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
+    @NotNull
+    //    TODO @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDateTime dateTime = LocalDateTime.now();
+
     public Vote() {
+    }
+
+    public Vote(Vote v) {
+        this(v.getId(), v.getDateTime(), v.getRestaurant(), v.getUser());
     }
 
     public Vote(Integer id, LocalDateTime dateTime, Restaurant restaurant, User user) {

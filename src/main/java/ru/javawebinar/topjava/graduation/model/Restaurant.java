@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.graduation.model;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
@@ -13,15 +14,21 @@ public class Restaurant extends AbstractNamedEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("dateTime DESC")
     @BatchSize(size = 200)
+    @JsonManagedReference
     private List<Vote> votes;
 
     @Column
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("added DESC")
     @BatchSize(size = 200)
+    @JsonManagedReference
     private List<Menu> lunchMenus;
 
     public Restaurant() {
+    }
+
+    public Restaurant(Integer id, String name){
+        super(id, name );
     }
 
     public Restaurant(Integer id, String name, List<Vote> votes, List<Menu> lunchMenus) {

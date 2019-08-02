@@ -51,7 +51,8 @@ public class User extends AbstractNamedEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     @OrderBy("dateTime DESC")
     @BatchSize(size = 200)
-    protected List<Vote> votes;
+    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private List<Vote> votes;
 
     public User() {
     }
@@ -61,7 +62,7 @@ public class User extends AbstractNamedEntity {
     }
 
     public User(Integer id, String name, String email, String password, Role role, Role... roles) {
-        this(id, name, email, password, Collections.emptyList(), true, new Date(), EnumSet.of(role, roles));
+        this(id, name, email, password, null, true, new Date(), EnumSet.of(role, roles));
     }
 
     public User(Integer id, String name, String email, String password, List<Vote> votes, boolean enabled, Date registered, Collection<Role> roles) {
@@ -116,6 +117,10 @@ public class User extends AbstractNamedEntity {
 
     public List<Vote> getVotes() {
         return votes;
+    }
+
+    public void setVotes(List<Vote> votes) {
+        this.votes = votes;
     }
 
     @Override

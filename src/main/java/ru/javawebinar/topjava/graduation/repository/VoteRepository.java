@@ -20,12 +20,11 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     List<Vote> findByUserId(int userId);
 
     //    Vote findByUserIdAndDateTime(int userId, LocalDateTime dateTime);
+    List<Vote> findByUserIdAndDateTimeBetween(int userId, LocalDateTime dateFrom, LocalDateTime dateTo);
 
     List<Vote> findByRestaurantId(int restaurantId);
 
     //    Vote findByRestaurantIdAndDateTime(int restaurantId, LocalDateTime dateTime);
+    List<Vote> findByRestaurantIdAndDateTimeBetween(int restaurantId, LocalDateTime dateFrom, LocalDateTime dateTo);
 
-    List<Vote> findByUserIdAndDateTimeBetween(int userId, LocalDateTime dateFrom, LocalDateTime dateTo);
-
-    List<Vote> getByRestaurantIdAndDateTimeBetween(int restaurantId, LocalDateTime dateFrom, LocalDateTime dateTo);
 }

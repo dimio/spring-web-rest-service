@@ -1,4 +1,4 @@
-package ru.javawebinar.topjava.graduation.service.user;
+package ru.javawebinar.topjava.graduation.service;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

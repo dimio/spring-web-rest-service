@@ -7,20 +7,25 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @Entity
 @Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date_time", "restaurant_id"}, name = "votes_unique_ucd_idx")})
 @BatchSize(size = 200)
 public class Vote extends AbstractBaseEntity {
 
+    public static final LocalTime DECISION_TIME = LocalTime.of(11, 00);
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
+    @NotNull
     private Restaurant restaurant;
 
     @Column(name = "date_time", nullable = false, columnDefinition = "timestamp default now()")
@@ -35,7 +40,7 @@ public class Vote extends AbstractBaseEntity {
         this(v.getId(), v.getDateTime(), v.getRestaurant(), v.getUser());
     }
 
-    public Vote(Integer id, LocalDateTime dateTime, Restaurant restaurant, User user) {
+    public Vote(Integer id, @NotNull LocalDateTime dateTime, @NotNull Restaurant restaurant, @NotNull User user) {
         this.id = id;
         this.restaurant = restaurant;
         this.user = user;

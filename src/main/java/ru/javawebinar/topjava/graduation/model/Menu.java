@@ -50,12 +50,11 @@ public class Menu extends AbstractNamedEntity {
     }
 
     public Menu(Menu m) {
-        this(m.getId(), m.getName(), m.getAdded(), m.getDishes(), m.getPriceInt(), m.getPriceFract(), m.getRestaurant());
+        this(m.getId(), m.getName(), m.getAdded(), m.getDishes(), m.getPriceInt(), m.getPriceFract());
     }
 
-    public Menu(Integer id, String name, LocalDate added, String dishes, Long priceInt, Long priceFract, Restaurant restaurant) {
+    public Menu(Integer id, String name, LocalDate added, String dishes, Long priceInt, Long priceFract) {
         super(id, name);
-        this.restaurant = restaurant;
         this.added = added;
         this.dishes = dishes;
         this.priceInt = priceInt;

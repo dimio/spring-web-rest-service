@@ -12,13 +12,6 @@ public class Restaurant extends AbstractNamedEntity {
 
     @Column
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    @OrderBy("dateTime DESC")
-    @BatchSize(size = 200)
-    @JsonManagedReference
-    private List<Vote> votes;
-
-    @Column
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("added DESC")
     @BatchSize(size = 200)
     @JsonManagedReference
@@ -27,26 +20,17 @@ public class Restaurant extends AbstractNamedEntity {
     public Restaurant() {
     }
 
-    public Restaurant(Integer id, String name){
-        super(id, name );
+    public Restaurant(Integer id, String name) {
+        super(id, name);
     }
 
-    public Restaurant(Integer id, String name, List<Vote> votes, List<Menu> lunchMenus) {
+    public Restaurant(Integer id, String name, List<Menu> lunchMenus) {
         super(id, name);
-        this.votes = votes;
         this.lunchMenus = lunchMenus;
     }
 
     public Restaurant(Restaurant r) {
-        this(r.getId(), r.getName(), r.getVotes(), r.getLunchMenus());
-    }
-
-    public List<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(List<Vote> votes) {
-        this.votes = votes;
+        this(r.getId(), r.getName(), r.getLunchMenus());
     }
 
     public List<Menu> getLunchMenus() {
@@ -62,7 +46,6 @@ public class Restaurant extends AbstractNamedEntity {
         return "Restaurant{" +
             "id=" + id +
             ", name='" + name + '\'' +
-            ", votes=" + votes +
             ", lunchMenus=" + lunchMenus +
             '}';
     }

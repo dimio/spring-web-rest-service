@@ -36,6 +36,7 @@ public class VotingService {
     }
 
     //    @CacheEvict(value = "votes", allEntries = true)
+    @Transactional
     public Vote vote(Integer userId, Integer restaurantId) {
         return vote(userId, restaurantId, LocalDate.now(clock), LocalTime.now(clock));
     }
@@ -45,13 +46,12 @@ public class VotingService {
         Assert.notNull(restaurantId, "restaurantId must not be null");
         Vote vote = null;
         if (time.isBefore(DECISION_TIME)){
-            LocalDateTime currentDateTime = date.atTime(time);
-            vote = getForUserAndDate(userId, currentDateTime);
+            vote = getForUserAndDate(userId, date);
             if (vote != null){
                 voteRepository.deleteById(vote.getId());
             }
             vote = new Vote(
-                null, currentDateTime,
+                null, date,
                 restaurantRepository.getOne(restaurantId),
                 userRepository.getOne(userId)
             );
@@ -72,13 +72,14 @@ public class VotingService {
         return voteRepository.findAll(sort);
     }
 
-    public Vote getForUserAndDate(Integer userId, LocalDateTime dateTime) {
-        List<Vote> votes = voteRepository.findByUserIdAndDateTimeBetween(userId, dateTime, dateTime);
+    public Vote getForUserAndDate(Integer userId, LocalDate date) {
+        List<Vote> votes = voteRepository.findByUserIdAndDateBetween(userId, date, date);
         return votes.isEmpty() ? null : votes.get(0);
     }
 
-    public Vote getForRestaurantAndDate(Integer restaurantId, LocalDateTime dateTime) {
-        List<Vote> votes = voteRepository.findByRestaurantIdAndDateTimeBetween(restaurantId, dateTime, dateTime);
+    public Vote getForRestaurantAndDate(Integer restaurantId, LocalDate date) {
+        List<Vote> votes = voteRepository.findByRestaurantIdAndDateBetween(restaurantId, date, date);
+        // use Optional votes.stream().findXXX ?
         return votes.isEmpty() ? null : votes.get(0);
     }
 

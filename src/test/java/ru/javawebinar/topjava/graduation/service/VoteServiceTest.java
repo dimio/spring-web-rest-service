@@ -8,13 +8,13 @@ import ru.javawebinar.topjava.graduation.model.Vote;
 import static ru.javawebinar.topjava.graduation.RestaurantTestData.*;
 import static ru.javawebinar.topjava.graduation.UserTestData.USER;
 import static ru.javawebinar.topjava.graduation.UserTestData.USER_ID;
-import static ru.javawebinar.topjava.graduation.VotingTestData.*;
+import static ru.javawebinar.topjava.graduation.VoteTestData.*;
 
 //TODO fix lazy init problem
-class VotingServiceTest extends AbstractServiceTest {
+class VoteServiceTest extends AbstractServiceTest {
 
     @Autowired
-    protected VotingService service;
+    protected VoteService service;
 
     @Test
     void vote() {

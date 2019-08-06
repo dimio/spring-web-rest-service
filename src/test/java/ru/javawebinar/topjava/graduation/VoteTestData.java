@@ -18,7 +18,7 @@ import static ru.javawebinar.topjava.graduation.TestUtil.readListFromJsonMvcResu
 import static ru.javawebinar.topjava.graduation.UserTestData.ADMIN;
 import static ru.javawebinar.topjava.graduation.UserTestData.USER;
 
-public class VotingTestData {
+public class VoteTestData {
     public static final int VOTE_ID = 1000;
 
     public static final LocalDateTime VOTE_DATE_TIME_NEW = LocalDateTime.of(2019, 6, 29, 10, 5);
@@ -36,8 +36,8 @@ public class VotingTestData {
 
 
     public static void assertMatch(Vote actual, Vote expected) {
-                assertThat(actual).isEqualToIgnoringGivenFields(expected, "user", "restaurant");
-//        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, "user", "vote");
+        //        assertThat(actual).isEqualTo(expected);
     }
 
     public static void assertMatch(Iterable<Vote> actual, Vote... expected) {
@@ -45,7 +45,7 @@ public class VotingTestData {
     }
 
     public static void assertMatch(Iterable<Vote> actual, Iterable<Vote> expected) {
-        assertThat(actual).usingElementComparatorIgnoringFields("user", "restaurant").isEqualTo(expected);
+        assertThat(actual).usingElementComparatorIgnoringFields("user", "vote").isEqualTo(expected);
     }
 
     public static ResultMatcher contentJson(Vote... expected) {

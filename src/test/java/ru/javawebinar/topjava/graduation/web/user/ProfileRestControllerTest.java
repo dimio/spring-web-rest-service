@@ -2,12 +2,14 @@ package ru.javawebinar.topjava.graduation.web.user;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 import ru.javawebinar.topjava.graduation.model.User;
+import ru.javawebinar.topjava.graduation.service.UserService;
 import ru.javawebinar.topjava.graduation.to.UserTo;
 import ru.javawebinar.topjava.graduation.util.UserUtil;
 import ru.javawebinar.topjava.graduation.web.AbstractControllerTest;
@@ -23,6 +25,9 @@ import static ru.javawebinar.topjava.graduation.UserTestData.*;
 import static ru.javawebinar.topjava.graduation.web.user.ProfileRestController.REST_URL;
 
 class ProfileRestControllerTest extends AbstractControllerTest {
+
+    @Autowired
+    protected UserService userService;
 
     @Test
     void testGet() throws Exception {

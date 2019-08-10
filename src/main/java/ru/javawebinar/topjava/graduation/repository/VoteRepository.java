@@ -18,7 +18,7 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     Vote save(Vote vote);
 
     // find... vs get... ? https://stackoverflow.com/a/24486114/11130103
-    List<Vote> findByUserId(int userId);
+    List<Vote> findAllByUserId(int userId);
 
     //    Vote findByUserIdAndDate(int userId, LocalDateTime dateTime);
     List<Vote> findByUserIdAndDateBetween(int userId, @NotNull LocalDate dateFrom, @NotNull LocalDate dateTo);

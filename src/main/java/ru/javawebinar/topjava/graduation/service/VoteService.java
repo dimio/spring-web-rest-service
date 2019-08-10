@@ -36,13 +36,13 @@ public class VoteService {
     }
 
     //    @CacheEvict(value = "votes", allEntries = true)
-    @Transactional
     public Vote vote(Integer userId, Integer restaurantId) {
         return vote(userId, restaurantId, LocalDate.now(clock), LocalTime.now(clock));
     }
 
     @Transactional
     Vote vote(Integer userId, Integer restaurantId, LocalDate date, LocalTime time) {
+        Assert.notNull(userId, "userId must not be null");
         Assert.notNull(restaurantId, "restaurantId must not be null");
         Vote vote = null;
         if (time.isBefore(DECISION_TIME)){
@@ -55,13 +55,25 @@ public class VoteService {
                 restaurantRepository.getOne(restaurantId),
                 userRepository.getOne(userId)
             );
-            voteRepository.save(vote);
+            vote = voteRepository.save(vote);
         }
         return vote;
     }
 
+    @Transactional
+    public boolean delete(int userId, LocalDate date) {
+        if (LocalTime.now(clock).isBefore(DECISION_TIME)){
+            Vote vote = getForUserAndDate(userId, date);
+            if (vote != null){
+                voteRepository.deleteById(vote.getId());
+                return true;
+            }
+        }
+        return false;
+    }
+
     public List<Vote> getAllForUser(Integer userId) {
-        return voteRepository.findByUserId(userId);
+        return voteRepository.findAllByUserId(userId);
     }
 
     public List<Vote> getAllForRestaurant(Integer restaurantId) {

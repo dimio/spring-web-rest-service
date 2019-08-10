@@ -3,11 +3,9 @@ package ru.javawebinar.topjava.graduation.web.vote;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.graduation.model.Vote;
 import ru.javawebinar.topjava.graduation.service.VoteService;
 
@@ -18,6 +16,7 @@ import java.util.List;
 @RequestMapping(value = AdminVoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
 public class AdminVoteController {
     static final String REST_URL = "/rest/admin/votes";
+
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final VoteService service;
@@ -32,30 +31,36 @@ public class AdminVoteController {
         return service.getAll(Sort.by(Sort.Direction.DESC, "date"));
     }
 
-    @GetMapping(value = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/user/{userId}/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Vote> getAllForUser(@PathVariable int userId) {
         log.info("get all votes for user {}", userId);
         return service.getAllForUser(userId);
     }
 
     //"/user/{userId}/filter" @RequestParam(required = false) LocalDate date
-    @GetMapping(value = "/user/{userId}/{date}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public Vote getForUserAndDate(@PathVariable int userId, @PathVariable(required = false) LocalDate date) {
+    @GetMapping(value = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public Vote getForUserAndDate(@PathVariable int userId,
+                                  @RequestParam(required = false)
+                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
         date = (date == null) ? LocalDate.now() : date;
-        log.info("get all votes for user {} and date ", userId);
+        log.info("get all votes for user {} and date {}", userId, date);
         return service.getForUserAndDate(userId, date);
     }
 
-    @GetMapping(value = "/restaurant/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/restaurant/{restaurantId}/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public List<Vote> getAllForRestaurant(@PathVariable int restaurantId) {
         log.info("get all votes for restaurant {}", restaurantId);
         return service.getAllForRestaurant(restaurantId);
     }
 
-    //    @GetMapping(value = "/restaurant/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    //    public List<Vote> getForRestaurantAndDate(@PathVariable int restaurantId, @RequestParam(required = false) LocalDate date) {
-    //        date = (date == null) ? LocalDate.now() : date;
-    //        log.info("get all votes for restaurant {} and date ", restaurantId);
-    //        return service.getForRestaurantAndDate(restaurantId, date);
-    //    }
+    @GetMapping(value = "/restaurant/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public List<Vote> getForRestaurantAndDate(@PathVariable int restaurantId,
+                                              @RequestParam(required = false)
+                                              @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+
+        date = (date == null) ? LocalDate.now() : date;
+        log.info("get all votes for restaurant {} and date {}", restaurantId, date);
+        return service.getForRestaurantAndDate(restaurantId, date);
+    }
 }

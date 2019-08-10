@@ -36,8 +36,8 @@ public class VoteTestData {
 
 
     public static void assertMatch(Vote actual, Vote expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "user", "vote");
-        //        assertThat(actual).isEqualTo(expected);
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, "user", "restaurant");
+        //      assertThat(actual).isEqualTo(expected);
     }
 
     public static void assertMatch(Iterable<Vote> actual, Vote... expected) {
@@ -45,11 +45,15 @@ public class VoteTestData {
     }
 
     public static void assertMatch(Iterable<Vote> actual, Iterable<Vote> expected) {
-        assertThat(actual).usingElementComparatorIgnoringFields("user", "vote").isEqualTo(expected);
+        assertThat(actual).usingElementComparatorIgnoringFields("user", "restaurant").isEqualTo(expected);
     }
 
     public static ResultMatcher contentJson(Vote... expected) {
         return result -> assertMatch(readListFromJsonMvcResult(result, Vote.class), List.of(expected));
+    }
+
+    public static ResultMatcher contentJson(Iterable<Vote> expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, Vote.class), expected);
     }
 
     public static ResultMatcher contentJson(Vote expected) {

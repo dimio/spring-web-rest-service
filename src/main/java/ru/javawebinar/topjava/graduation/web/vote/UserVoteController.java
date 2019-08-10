@@ -2,6 +2,8 @@ package ru.javawebinar.topjava.graduation.web.vote;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -17,7 +19,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping(value = UserVoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
-public abstract class UserVoteController {
+public class UserVoteController {
     static final String REST_URL = "/rest/profile/votes";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
@@ -28,24 +30,38 @@ public abstract class UserVoteController {
         this.service = service;
     }
 
-    @PostMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Vote> vote(@PathVariable("id") int restaurantId, @AuthenticationPrincipal AuthorizedUser authUser) {
+    @PostMapping(value = "/{restaurantId}")
+    public ResponseEntity<Vote> vote(@PathVariable int restaurantId, @AuthenticationPrincipal AuthorizedUser authUser) {
         int userId = authUser.getId();
         log.info("vote for restaurant {} by user {}", restaurantId, userId);
         Vote vote = service.vote(userId, restaurantId);
-        URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-            .path(REST_URL + "/{id}")
-            .build().toUri();
-        return ResponseEntity.created(uriOfNewResource).body(vote);
+
+        if (vote != null){
+            URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
+                .path(REST_URL + "/{id}")
+                .buildAndExpand(vote.getId()).toUri();
+
+            return ResponseEntity.created(uriOfNewResource).body(vote);
+        }
+        return ResponseEntity.status(HttpStatus.LOCKED).body(null);
     }
 
-    //дата - если нет - вернуть на текущую
-    //    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    @GetMapping
-    public Vote get(@AuthenticationPrincipal AuthorizedUser authUser) {
+    @DeleteMapping()
+    public ResponseEntity delete(@AuthenticationPrincipal AuthorizedUser authUser) {
+        return service.delete(authUser.getId(), LocalDate.now())
+            ? ResponseEntity.status(HttpStatus.NO_CONTENT).body(null)
+            : ResponseEntity.status(HttpStatus.LOCKED).body(null);
+    }
+
+    @GetMapping()
+    public Vote get(@RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date,
+                    @AuthenticationPrincipal AuthorizedUser authUser) {
+
         int userId = authUser.getId();
-        log.info("get vote for user {}", userId);
-        return service.getForUserAndDate(userId, LocalDate.now());
+        date = (date == null) ? LocalDate.now() : date;
+        //        LocalDate currentDate = date.orElse(LocalDate.now());
+        log.info("get vote for user {} and date {}", userId, date);
+        return service.getForUserAndDate(userId, date);
     }
 
     @GetMapping(value = "/all")

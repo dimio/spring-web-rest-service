@@ -59,7 +59,7 @@ class UserVoteControllerTest extends AbstractControllerTest {
     @Test
     void testVoteUpdateBefore() throws Exception {
         service.setClockAndTimeZone(VOTE_DATE_TIME_BEFORE);
-        mockMvc.perform(post(REST_URL + '/' + RESTAURANT_2_ID).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put(REST_URL + '/' + RESTAURANT_2_ID).contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(USER)))
             .andDo(print())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))

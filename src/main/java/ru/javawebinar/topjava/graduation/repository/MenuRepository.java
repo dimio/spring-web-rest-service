@@ -33,5 +33,8 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
 
     //getWithRestaurant
     @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant WHERE m.id=:id AND m.restaurant.id=:restaurantId")
-    Menu getWitRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);
+    Menu getWithRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);
+
+    @Query("SELECT m FROM Menu m WHERE m.id=:id AND m.restaurant.id=:restaurantId")
+    Menu getForRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);
 }

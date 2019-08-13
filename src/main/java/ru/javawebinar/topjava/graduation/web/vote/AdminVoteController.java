@@ -31,14 +31,14 @@ public class AdminVoteController {
         return service.getAll(Sort.by(Sort.Direction.DESC, "date"));
     }
 
-    @GetMapping(value = "/user/{userId}/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/user/{userId}/all")
     public List<Vote> getAllForUser(@PathVariable int userId) {
         log.info("get all votes for user {}", userId);
         return service.getAllForUser(userId);
     }
 
     //"/user/{userId}/filter" @RequestParam(required = false) LocalDate date
-    @GetMapping(value = "/user/{userId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/user/{userId}")
     public Vote getForUserAndDate(@PathVariable int userId,
                                   @RequestParam(required = false)
                                   @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
@@ -48,13 +48,13 @@ public class AdminVoteController {
         return service.getForUserAndDate(userId, date);
     }
 
-    @GetMapping(value = "/restaurant/{restaurantId}/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/restaurant/{restaurantId}/all")
     public List<Vote> getAllForRestaurant(@PathVariable int restaurantId) {
         log.info("get all votes for restaurant {}", restaurantId);
         return service.getAllForRestaurant(restaurantId);
     }
 
-    @GetMapping(value = "/restaurant/{restaurantId}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/restaurant/{restaurantId}")
     public List<Vote> getForRestaurantAndDate(@PathVariable int restaurantId,
                                               @RequestParam(required = false)
                                               @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {

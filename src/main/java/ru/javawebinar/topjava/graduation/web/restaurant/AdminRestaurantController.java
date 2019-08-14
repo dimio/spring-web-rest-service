@@ -25,7 +25,7 @@ import static ru.javawebinar.topjava.graduation.util.ValidationUtil.checkNew;
     consumes = MediaType.APPLICATION_JSON_VALUE)
 public class AdminRestaurantController {
 
-    static final String REST_URL = "/rest/admin/restaurants";
+    public static final String REST_URL = "/rest/admin/restaurants";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -67,7 +67,7 @@ public class AdminRestaurantController {
         checkNew(menu);
         Menu newMenu = restaurantService.addMenu(restaurantId, menu);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-            .path(REST_URL + "/{restaurantId}/{menuId}")
+            .path(REST_URL + '/' + restaurantId + "/{menuId}")
             .buildAndExpand(newMenu.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(newMenu);
     }

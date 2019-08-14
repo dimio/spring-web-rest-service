@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.graduation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -27,7 +26,7 @@ public class Menu extends AbstractNamedEntity {
 
     @NotNull
     @Column(name = "added", nullable = false, columnDefinition = "timestamp default now()")
-    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    //    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private LocalDate added;
 
     @NotBlank
@@ -55,7 +54,7 @@ public class Menu extends AbstractNamedEntity {
 
     public Menu(Integer id, String name, LocalDate added, String dishes, Long priceInt, Long priceFract) {
         super(id, name);
-        this.added = added;
+        setAdded(added);
         this.dishes = dishes;
         this.priceInt = priceInt;
         this.priceFract = priceFract;
@@ -74,7 +73,7 @@ public class Menu extends AbstractNamedEntity {
     }
 
     public void setAdded(LocalDate added) {
-        this.added = added;
+        this.added = (added == null) ? LocalDate.now() : added;
     }
 
     public String getDishes() {

@@ -13,6 +13,8 @@ import ru.javawebinar.topjava.graduation.util.exception.NotFoundException;
 import java.time.LocalDate;
 import java.util.List;
 
+import static ru.javawebinar.topjava.graduation.util.DateTimeUtil.MAX_DATE;
+import static ru.javawebinar.topjava.graduation.util.DateTimeUtil.MIN_DATE;
 import static ru.javawebinar.topjava.graduation.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -41,9 +43,9 @@ public class RestaurantService {
         checkNotFoundWithId(restaurantRepository.save(restaurant), restaurant.getId());
     }
 
-    public Restaurant getById(Integer restaurantId) {
+    public Restaurant get(Integer restaurantId) {
         Assert.notNull(restaurantId, "restaurantId must be not null");
-        return restaurantRepository.getOne(restaurantId);
+        return restaurantRepository.findById(restaurantId).orElse(null);
     }
 
     public List<Restaurant> getAll(Sort sort) {
@@ -68,7 +70,7 @@ public class RestaurantService {
         menuRepository.save(menu);
     }
 
-    protected Menu getMenuForRestaurant(int restaurantId, int menuId) throws NotFoundException {
+    public Menu getMenuForRestaurant(int restaurantId, int menuId) throws NotFoundException {
         Menu menu = menuRepository.getForRestaurant(menuId, restaurantId);
         checkNotFoundWithId(menu, menuId);
         return menu;
@@ -76,5 +78,11 @@ public class RestaurantService {
 
     public List<Menu> getMenusForRestaurantBetweenDate(int restaurantId, LocalDate startDate, LocalDate endDate) throws NotFoundException {
         return menuRepository.getByRestaurant_IdAndAddedBetweenOrderByAddedDesc(restaurantId, startDate, endDate);
+    }
+
+    public List<Menu> getAllMenusForRestaurant(int restaurantId) throws NotFoundException {
+        return menuRepository.getByRestaurant_IdAndAddedBetweenOrderByAddedDesc(
+            restaurantId, MIN_DATE, MAX_DATE
+        );
     }
 }

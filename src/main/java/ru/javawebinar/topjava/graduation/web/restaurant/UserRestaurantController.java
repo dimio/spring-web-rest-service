@@ -22,7 +22,7 @@ import java.util.List;
     produces = MediaType.APPLICATION_JSON_VALUE)
 public class UserRestaurantController {
 
-    static final String REST_URL = "/rest/profile/restaurants";
+    public static final String REST_URL = "/rest/profile/restaurants";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
@@ -33,15 +33,17 @@ public class UserRestaurantController {
     }
 
     @GetMapping(value = "/all")
-    public List<Restaurant> getAllRestaurants(Sort sort) {
+    //    public List<Restaurant> getAllRestaurants(@RequestParam(required = false) Sort sort) {
+    public List<Restaurant> getAllRestaurants() {
+        //        sort = (sort == null) ? Sort.unsorted() : sort;
         log.info("get all restaurants");
-        return restaurantService.getAll(sort);
+        return restaurantService.getAll(Sort.unsorted());
     }
 
     @GetMapping(value = "/{restaurantId}")
     public Restaurant getRestaurantById(@PathVariable int restaurantId) {
         log.info("get restaurant {}", restaurantId);
-        return restaurantService.getById(restaurantId);
+        return restaurantService.get(restaurantId);
     }
 
     @GetMapping(value = "/{restaurantId}/menu")

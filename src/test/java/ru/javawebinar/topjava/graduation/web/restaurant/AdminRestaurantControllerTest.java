@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
+import ru.javawebinar.topjava.graduation.RestaurantTestData;
 import ru.javawebinar.topjava.graduation.model.Menu;
 import ru.javawebinar.topjava.graduation.model.Restaurant;
 import ru.javawebinar.topjava.graduation.service.RestaurantService;
@@ -13,9 +14,7 @@ import ru.javawebinar.topjava.graduation.web.AbstractControllerTest;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javawebinar.topjava.graduation.MenuTestData.assertMatch;
 import static ru.javawebinar.topjava.graduation.MenuTestData.*;
-import static ru.javawebinar.topjava.graduation.RestaurantTestData.assertMatch;
 import static ru.javawebinar.topjava.graduation.RestaurantTestData.*;
 import static ru.javawebinar.topjava.graduation.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.graduation.TestUtil.userHttpBasic;
@@ -47,8 +46,8 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
         Restaurant returned = readFromJson(action, Restaurant.class);
         expected.setId(returned.getId());
 
-        assertMatch(returned, expected);
-        assertMatch(restaurantService.getAll(Sort.by("id")), RESTAURANT_1, RESTAURANT_2, expected);
+        RestaurantTestData.assertMatchRestaurant(returned, expected);
+        RestaurantTestData.assertMatchRestaurant(restaurantService.getAll(Sort.by("id")), RESTAURANT_1, RESTAURANT_2, expected);
     }
 
     @Test
@@ -64,7 +63,7 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
             .andDo(print())
             .andExpect(status().isNoContent());
 
-        assertMatch(restaurantService.get(RESTAURANT_1_ID), updated);
+        RestaurantTestData.assertMatchRestaurant(restaurantService.get(RESTAURANT_1_ID), updated);
     }
 
     @Test
@@ -75,7 +74,7 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
             .andDo(print())
             .andExpect(status().isNoContent());
 
-        assertMatch(restaurantService.getAll(Sort.unsorted()), RESTAURANT_2);
+        RestaurantTestData.assertMatchRestaurant(restaurantService.getAll(Sort.unsorted()), RESTAURANT_2);
     }
 
     @Test

@@ -25,29 +25,29 @@ public class RestaurantTestData {
     public static final List<Menu> RESTAURANT_2_MENUS = new ArrayList<>(Arrays.asList(MENU_R2_D27, MENU_R2_D28));
     public static final Restaurant RESTAURANT_2 = new Restaurant(RESTAURANT_2_ID, "Dock Clownalds", RESTAURANT_2_MENUS);
 
-    public static void assertMatch(Restaurant actual, Restaurant expected) {
+    public static void assertMatchRestaurant(Restaurant actual, Restaurant expected) {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "lunchMenus");
         //      assertThat(actual).isEqualTo(expected);
     }
 
-    public static void assertMatch(Iterable<Restaurant> actual, Restaurant... expected) {
-        assertMatch(actual, List.of(expected));
+    public static void assertMatchRestaurant(Iterable<Restaurant> actual, Restaurant... expected) {
+        assertMatchRestaurant(actual, List.of(expected));
     }
 
-    public static void assertMatch(Iterable<Restaurant> actual, Iterable<Restaurant> expected) {
+    public static void assertMatchRestaurant(Iterable<Restaurant> actual, Iterable<Restaurant> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("lunchMenus").isEqualTo(expected);
     }
 
     public static ResultMatcher contentJson(Restaurant... expected) {
-        return result -> assertMatch(readListFromJsonMvcResult(result, Restaurant.class), List.of(expected));
+        return result -> assertMatchRestaurant(readListFromJsonMvcResult(result, Restaurant.class), List.of(expected));
     }
 
     public static ResultMatcher contentJson(Iterable<Restaurant> expected) {
-        return result -> assertMatch(readListFromJsonMvcResult(result, Restaurant.class), expected);
+        return result -> assertMatchRestaurant(readListFromJsonMvcResult(result, Restaurant.class), expected);
     }
 
     public static ResultMatcher contentJson(Restaurant expected) {
-        return result -> assertMatch(readFromJsonMvcResult(result, Restaurant.class), expected);
+        return result -> assertMatchRestaurant(readFromJsonMvcResult(result, Restaurant.class), expected);
     }
 
 }

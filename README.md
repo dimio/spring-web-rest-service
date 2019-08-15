@@ -17,7 +17,7 @@ API path: `topjava_graduation/rest/profile`
 `curl -s http://localhost:8080/topjava_graduation/rest/profile/ --user user@yandex.ru:password`
 
 * Update profile:
-`curl -s -X PUT http://localhost:8080/topjava_graduation/rest/profile --user user@yandex.ru:password -d '{"name":"New name", "email":"user@yandex.ru", "password":"password"}' -H 'Content-Type:application/json;charset=UTF-8'`
+`curl -s -X PUT http://localhost:8080/topjava_graduation/rest/profile -d '{"name":"New name", "email":"user@yandex.ru", "password":"password"}' -H 'Content-Type:application/json;charset=UTF-8' --user user@yandex.ru:password`
 
 * Delete profile: `curl -s -X DELETE http://localhost:8080/topjava_graduation/rest/profile --user user@yandex.ru:password`
 

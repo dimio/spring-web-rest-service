@@ -39,13 +39,28 @@ API path: `topjava_graduation/rest/profile/votes`
 * Get all votes:
 `curl -s http://localhost:8080/topjava_graduation/rest/profile/votes/all --user user@yandex.ru:password`
 
+##### Restaurant:
+API path: `topjava_graduation/rest/profile/restaurants`
+
+* Get all restaurants:
+`curl -s http://localhost:8080/topjava_graduation/rest/profile/restaurants/all --user user@yandex.ru:password`
+
+* Get restaurant with specified ID:
+`curl -s http://localhost:8080/topjava_graduation/rest/profile/restaurants/100002 --user user@yandex.ru:password`
+
+* Get menus on today for restaurant with specified ID:
+`curl -s http://localhost:8080/topjava_graduation/rest/profile/restaurants/100002/menu --user user@yandex.ru:password`
+
+* Get menus on specified date for restaurant with specified ID:
+`curl -s http://localhost:8080/topjava_graduation/rest/profile/restaurants/100002/menu?date=2019-06-27 --user user@yandex.ru:password`
+
 ### Admin:
 
 ##### Users:
 API path: `/rest/admin/users`
 
 * Create new user:
-`curl -s -X POST -H http://localhost:8080/topjava_graduation/rest/admin/users 'Content-Type: application/json; charset=UTF-8' -d '{"name" : "newName", "email" : "newemail@ya.ru", "password" : "newPassword"}'`
+`curl -s http://localhost:8080/topjava_graduation/rest/admin/users -X POST -H 'Content-Type: application/json; charset=UTF-8' -d '{"name" : "newName", "email" : "newemail@ya.ru", "password" : "newPassword"}' --user admin@gmail.com:admin`
 
 * Get all users:
 `curl -s http://localhost:8080/topjava_graduation/rest/admin/users --user admin@gmail.com:admin`
@@ -54,10 +69,10 @@ API path: `/rest/admin/users`
 `curl -s http://localhost:8080/topjava_graduation/rest/admin/users/100000 --user admin@gmail.com:admin`
 
 * Change user profile with specified ID:
-`curl -s -X PUT http://localhost:8080/topjava_graduation/rest/admin/users/100000 --user admin@gmail.com:admin -d '{"name":"New name", "email":"newmail@yandex.ru", "password":"password"}' -H 'Content-Type:application/json;charset=UTF-8'`
+`curl -s -X PUT http://localhost:8080/topjava_graduation/rest/admin/users/100000 -d '{"name":"New name", "email":"newmail@yandex.ru", "password":"password"}' -H 'Content-Type:application/json;charset=UTF-8' --user admin@gmail.com:admin`
 
 * Delete user with specified ID:
-`curl -s -X DELETE http://localhost:8080/topjava_graduation/rest/admin/users/100000 --user admin@gmail.com:admi`
+`curl -s -X DELETE http://localhost:8080/topjava_graduation/rest/admin/users/100000 --user admin@gmail.com:admin`
 
 * Get user with specified email:
 `curl -s http://localhost:8080/topjava_graduation/rest/admin/users/by?email=user@yandex.ru --user admin@gmail.com:admin`
@@ -85,3 +100,24 @@ API path: `topjava_graduation/rest/admin/votes`
 
 * Get votes for specified date and restaurant with specified restaurant ID:
 `curl -s http://localhost:8080/topjava_graduation/rest/admin/votes/restaurant/100002?date=2019-06-27 --user admin@gmail.com:admin`
+
+##### Restaurant:
+API path: `topjava_graduation/rest/admin/restaurants`
+
+* Add new restaurant:
+`curl -s http://localhost:8080/topjava_graduation/rest/admin/restaurants -X POST -H 'Content-Type: application/json; charset=UTF-8' -d '{"name":"newRestaurant"}' --user admin@gmail.com:admin`
+
+* Update restaurant with specified ID:
+`curl -s -X PUT http://localhost:8080/topjava_graduation/rest/admin/restaurants/100002 -d '{"name":"New name"}' -H 'Content-Type:application/json;charset=UTF-8' --user admin@gmail.com:admin`
+
+* Delete restaurant with specified ID:
+`curl -s -X DELETE http://localhost:8080/topjava_graduation/rest/admin/restaurants/100002 --user admin@gmail.com:admin`
+
+* Add new menu to restaurant with specified ID:
+`curl -s http://localhost:8080/topjava_graduation/rest/admin/restaurants/100002 -X POST -H 'Content-Type: application/json; charset=UTF-8' -d '{"name":"newMenu", "dishes":"newDishes", "priceInt":10, "priceFract":88}' --user admin@gmail.com:admin`
+
+* Update menu with specified ID to restaurant with specified ID:
+`curl -s -X PUT http://localhost:8080/topjava_graduation/rest/admin/restaurants/100002/100004 -d '{"name":"UpdatedName", "priceInt":999}' -H 'Content-Type:application/json;charset=UTF-8' --user admin@gmail.com:admin`
+
+* Delete menu with specified ID to restaurant with specified ID:
+`curl -s -X DELETE http://localhost:8080/topjava_graduation/rest/admin/restaurants/100002/100004 --user admin@gmail.com:admin`

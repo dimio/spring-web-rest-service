@@ -38,15 +38,15 @@ public class RestaurantTestData {
         assertThat(actual).usingElementComparatorIgnoringFields("lunchMenus").isEqualTo(expected);
     }
 
-    public static ResultMatcher contentJson(Restaurant... expected) {
+    public static ResultMatcher contentJsonRestaurant(Restaurant... expected) {
         return result -> assertMatchRestaurant(readListFromJsonMvcResult(result, Restaurant.class), List.of(expected));
     }
 
-    public static ResultMatcher contentJson(Iterable<Restaurant> expected) {
+    public static ResultMatcher contentJsonRestaurant(Iterable<Restaurant> expected) {
         return result -> assertMatchRestaurant(readListFromJsonMvcResult(result, Restaurant.class), expected);
     }
 
-    public static ResultMatcher contentJson(Restaurant expected) {
+    public static ResultMatcher contentJsonRestaurant(Restaurant expected) {
         return result -> assertMatchRestaurant(readFromJsonMvcResult(result, Restaurant.class), expected);
     }
 

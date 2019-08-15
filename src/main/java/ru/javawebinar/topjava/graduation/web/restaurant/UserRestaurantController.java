@@ -3,11 +3,9 @@ package ru.javawebinar.topjava.graduation.web.restaurant;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Sort;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import ru.javawebinar.topjava.graduation.model.Menu;
 import ru.javawebinar.topjava.graduation.model.Restaurant;
 import ru.javawebinar.topjava.graduation.service.RestaurantService;
@@ -33,9 +31,10 @@ public class UserRestaurantController {
     }
 
     @GetMapping(value = "/all")
-    //    public List<Restaurant> getAllRestaurants(@RequestParam(required = false) Sort sort) {
+    //public List<Restaurant> getAllRestaurants(@RequestParam(required = false) Sort sort) {
     public List<Restaurant> getAllRestaurants() {
-        //        sort = (sort == null) ? Sort.unsorted() : sort;
+        //converter needed
+        //sort = (sort == null) ? Sort.unsorted() : sort;
         log.info("get all restaurants");
         return restaurantService.getAll(Sort.unsorted());
     }
@@ -47,9 +46,11 @@ public class UserRestaurantController {
     }
 
     @GetMapping(value = "/{restaurantId}/menu")
-    public List<Menu> getMenuForRestaurantToday(@PathVariable int restaurantId) throws NotFoundException {
+    public List<Menu> getMenuForRestaurantForDate(@PathVariable int restaurantId,
+                                                  @RequestParam(required = false)
+                                                  @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) throws NotFoundException {
         log.info("get menu for restaurant {} today", restaurantId);
-        LocalDate date = LocalDate.now();
+        date = (date == null) ? LocalDate.now() : date;
         return restaurantService.getMenusForRestaurantBetweenDate(restaurantId, date, date);
     }
 }

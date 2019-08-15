@@ -35,7 +35,7 @@ public class AdminRestaurantController {
         this.restaurantService = service;
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping()
     public ResponseEntity<Restaurant> addRestaurant(@Valid @RequestBody Restaurant restaurant) {
         log.info("add restaurant {}", restaurant);
         checkNew(restaurant);
@@ -46,7 +46,7 @@ public class AdminRestaurantController {
         return ResponseEntity.created(uriOfNewResource).body(newRestaurant);
     }
 
-    @PutMapping(value = "/{restaurantId}", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PutMapping(value = "/{restaurantId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void updateRestaurant(@PathVariable int restaurantId, @Valid @RequestBody Restaurant restaurant) throws NotFoundException {
         log.info("update restaurant {} with id {}", restaurant, restaurantId);
@@ -54,7 +54,7 @@ public class AdminRestaurantController {
         restaurantService.update(restaurant);
     }
 
-    @DeleteMapping(value = "/{restaurantId}")
+    @DeleteMapping(value = "/{restaurantId}", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteRestaurant(@PathVariable int restaurantId) throws NotFoundException {
         log.info("delete restaurant {}", restaurantId);
@@ -81,7 +81,7 @@ public class AdminRestaurantController {
         restaurantService.updateMenu(restaurantId, menu);
     }
 
-    @DeleteMapping(value = "/{restaurantId}/{menuId}")
+    @DeleteMapping(value = "/{restaurantId}/{menuId}", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteMenu(@PathVariable int restaurantId, @PathVariable int menuId) throws NotFoundException {
         log.info("delete menu {} for restaurant {}", menuId, restaurantId);

@@ -9,8 +9,6 @@ import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
 import java.time.LocalTime;
 
-//TODO: vote using START_SEQ from AbstractBaseEntity, need redesign votes table for using shared START_SEQ or make "id" field for vote
-
 @Entity
 @Table(name = "votes", uniqueConstraints = {@UniqueConstraint(columnNames = {"user_id", "date", "restaurant_id"}, name = "votes_unique_ucd_idx")})
 @BatchSize(size = 200)
@@ -31,7 +29,6 @@ public class Vote extends AbstractBaseEntity {
     private Restaurant restaurant;
 
     @Column(name = "date", nullable = false, columnDefinition = "date default now()")
-    //    TODO @JsonProperty(access = JsonProperty.Access.READ_ONLY)
     private @NotNull LocalDate date = LocalDate.now();
 
     public Vote() {

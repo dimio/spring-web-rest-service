@@ -17,9 +17,10 @@ import static ru.javawebinar.topjava.graduation.TestUtil.readFromJsonMvcResult;
 import static ru.javawebinar.topjava.graduation.TestUtil.readListFromJsonMvcResult;
 import static ru.javawebinar.topjava.graduation.UserTestData.ADMIN;
 import static ru.javawebinar.topjava.graduation.UserTestData.USER;
+import static ru.javawebinar.topjava.graduation.model.AbstractBaseEntity.START_SEQ;
 
 public class VoteTestData {
-    public static final int VOTE_ID = 1000;
+    public static final int VOTE_ID = START_SEQ + 8;
 
     public static final LocalDateTime VOTE_DATE_TIME_NEW = LocalDateTime.of(2019, 6, 29, 10, 5);
     public static final LocalDateTime VOTE_DATE_TIME_BEFORE = LocalDateTime.of(2019, 6, 27, 10, 3);

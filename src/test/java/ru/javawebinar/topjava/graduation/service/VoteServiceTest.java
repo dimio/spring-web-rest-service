@@ -21,6 +21,7 @@ class VoteServiceTest extends AbstractServiceTest {
         service.setClockAndTimeZone(VOTE_DATE_TIME_NEW);
         newVote.setId(service.vote(USER_ID, RESTAURANT_2_ID).getId());
         assertMatch(service.getForRestaurantAndDate(RESTAURANT_2_ID, VOTE_DATE_TIME_NEW.toLocalDate()), newVote);
+
     }
 
     @Test

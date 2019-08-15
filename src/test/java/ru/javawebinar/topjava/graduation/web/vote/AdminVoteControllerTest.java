@@ -47,7 +47,7 @@ class AdminVoteControllerTest extends AbstractControllerTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(contentJson(USER_VOTE_1, USER_VOTE_2));
+            .andExpect(contentJson(USER_VOTE_2, USER_VOTE_1));
     }
 
     @Test
@@ -68,7 +68,7 @@ class AdminVoteControllerTest extends AbstractControllerTest {
             .andDo(print())
             .andExpect(status().isOk())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(contentJson(Collections.singletonList(ADMIN_VOTE_2)));
+            .andExpect(contentJson(ADMIN_VOTE_2, USER_VOTE_1));
     }
 
     @Test

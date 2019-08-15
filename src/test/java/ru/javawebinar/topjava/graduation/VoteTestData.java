@@ -30,7 +30,7 @@ public class VoteTestData {
     public static final Vote ADMIN_VOTE_2 = new Vote(VOTE_ID + 3, LocalDate.of(2019, 6, 28), RESTAURANT_2, ADMIN);
 
     public static void assertMatch(Vote actual, Vote expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "user", "restaurant");
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, "id", "user", "restaurant");
     }
 
     public static void assertMatch(Iterable<Vote> actual, Vote... expected) {
@@ -38,7 +38,7 @@ public class VoteTestData {
     }
 
     public static void assertMatch(Iterable<Vote> actual, Iterable<Vote> expected) {
-        assertThat(actual).usingElementComparatorIgnoringFields("user", "restaurant").isEqualTo(expected);
+        assertThat(actual).usingElementComparatorIgnoringFields("id", "user", "restaurant").isEqualTo(expected);
     }
 
     public static ResultMatcher contentJson(Vote... expected) {

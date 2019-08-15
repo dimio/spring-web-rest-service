@@ -53,7 +53,7 @@ class UserVoteControllerTest extends AbstractControllerTest {
             .andDo(print())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(contentJson(USER_VOTE_1, USER_VOTE_2));
+            .andExpect(contentJson(USER_VOTE_2, USER_VOTE_1));
     }
 
     @Test

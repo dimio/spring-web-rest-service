@@ -30,8 +30,6 @@ public class UserVoteController {
         this.service = service;
     }
 
-//    @PostMapping(value = "/{restaurantId}")
-//    @PutMapping(value = "/{restaurantId}")
     @RequestMapping(value = "/{restaurantId}", method = {RequestMethod.PUT, RequestMethod.POST})
     public ResponseEntity<Vote> vote(@PathVariable int restaurantId, @AuthenticationPrincipal AuthorizedUser authUser) {
         int userId = authUser.getId();

@@ -109,7 +109,6 @@ public class Menu extends AbstractNamedEntity {
             ", dishes='" + dishes + '\'' +
             ", priceInt=" + priceInt +
             ", priceFract=" + priceFract +
-
             '}';
     }
 }

@@ -25,7 +25,6 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
 
     List<Vote> findByRestaurantId(int restaurantId);
 
-    //    Vote findByRestaurantIdAndDateTime(int restaurantId, LocalDateTime dateTime);
     List<Vote> findByRestaurantIdAndDateBetween(int restaurantId, LocalDate dateFrom, LocalDate dateTo);
 
 }

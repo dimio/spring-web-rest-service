@@ -5,9 +5,6 @@ import ru.javawebinar.topjava.graduation.model.Vote;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -32,13 +29,8 @@ public class VoteTestData {
     public static final Vote ADMIN_VOTE_1 = new Vote(VOTE_ID + 1, LocalDate.of(2019, 6, 27), RESTAURANT_1, ADMIN);
     public static final Vote ADMIN_VOTE_2 = new Vote(VOTE_ID + 3, LocalDate.of(2019, 6, 28), RESTAURANT_2, ADMIN);
 
-    public static final List<Vote> RESTAURANT_1_VOTES = new ArrayList<>(Arrays.asList(USER_VOTE_1, USER_VOTE_2, ADMIN_VOTE_1));
-    public static final List<Vote> RESTAURANT_2_VOTES = new ArrayList<>(Collections.singletonList(ADMIN_VOTE_2));
-
-
     public static void assertMatch(Vote actual, Vote expected) {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "user", "restaurant");
-        //      assertThat(actual).isEqualTo(expected);
     }
 
     public static void assertMatch(Iterable<Vote> actual, Vote... expected) {

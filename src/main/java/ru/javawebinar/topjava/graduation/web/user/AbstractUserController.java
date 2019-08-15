@@ -6,11 +6,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.InitBinder;
-import ru.javawebinar.topjava.graduation.model.AbstractBaseEntity;
 import ru.javawebinar.topjava.graduation.model.User;
 import ru.javawebinar.topjava.graduation.service.UserService;
 import ru.javawebinar.topjava.graduation.to.UserTo;
-import ru.javawebinar.topjava.graduation.util.exception.ModificationRestrictionException;
 
 import java.util.List;
 
@@ -26,12 +24,9 @@ public abstract class AbstractUserController {
     @Autowired
     private UniqueMailValidator emailValidator;
 
-    private boolean modificationRestriction;
-
     @InitBinder
     protected void initBinder(WebDataBinder binder) {
-        //TODO see AdminRestControllerTest, calling methods with email
-        //        binder.addValidators(emailValidator);
+        binder.addValidators(emailValidator);
     }
 
     public List<User> getAll() {
@@ -52,21 +47,18 @@ public abstract class AbstractUserController {
 
     public void delete(int id) {
         log.info("delete {}", id);
-        checkModificationAllowed(id);
         service.delete(id);
     }
 
     public void update(User user, int id) {
         log.info("update {} with id={}", user, id);
         assureIdConsistent(user, id);
-        checkModificationAllowed(id);
         service.update(user);
     }
 
     public void update(UserTo userTo, int id) {
         log.info("update {} with id={}", userTo, id);
         assureIdConsistent(userTo, id);
-        checkModificationAllowed(id);
         service.update(userTo);
     }
 
@@ -77,13 +69,6 @@ public abstract class AbstractUserController {
 
     public void enable(int id, boolean enabled) {
         log.info(enabled ? "enable {}" : "disable {}", id);
-        checkModificationAllowed(id);
         service.enable(id, enabled);
-    }
-
-    private void checkModificationAllowed(int id) {
-        if (modificationRestriction && id < AbstractBaseEntity.START_SEQ + 2){
-            throw new ModificationRestrictionException();
-        }
     }
 }

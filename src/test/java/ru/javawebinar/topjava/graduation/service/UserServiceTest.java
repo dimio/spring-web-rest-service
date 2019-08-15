@@ -1,14 +1,11 @@
 package ru.javawebinar.topjava.graduation.service;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.data.domain.Sort;
 import ru.javawebinar.topjava.graduation.model.Role;
 import ru.javawebinar.topjava.graduation.model.User;
-import ru.javawebinar.topjava.graduation.service.AbstractServiceTest;
-import ru.javawebinar.topjava.graduation.service.UserService;
 import ru.javawebinar.topjava.graduation.util.exception.NotFoundException;
 
 import java.util.Collections;
@@ -22,14 +19,6 @@ public class UserServiceTest extends AbstractServiceTest {
 
     @Autowired
     protected UserService service;
-
-    //    @Autowired
-    //    private CacheManager cacheManager;
-
-    @BeforeEach
-    void setUp() throws Exception {
-        //        cacheManager.getCache("users").clear();
-    }
 
     @Test
     void create() throws Exception {

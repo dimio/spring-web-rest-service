@@ -35,7 +35,6 @@ public class VoteService {
         this.clock = Clock.fixed(dateTime.atZone(zoneId).toInstant(), zoneId);
     }
 
-    //    @CacheEvict(value = "votes", allEntries = true)
     public Vote vote(Integer userId, Integer restaurantId) {
         return vote(userId, restaurantId, LocalDate.now(clock), LocalTime.now(clock));
     }

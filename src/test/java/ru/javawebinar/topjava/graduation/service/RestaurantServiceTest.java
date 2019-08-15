@@ -81,7 +81,7 @@ class RestaurantServiceTest extends AbstractControllerTest {
     @Test
     void getMenusForRestaurantBetweenDate() {
         LocalDate startDate = LocalDate.of(2019, 6, 20);
-        LocalDate endDate = LocalDate.of(2019, 6, 28);
+        LocalDate endDate = LocalDate.of(2019, 6, 27);
         assertMatch(service.getMenusForRestaurantBetweenDate(RESTAURANT_1_ID, startDate, endDate), MENU_R1_D27);
     }
 

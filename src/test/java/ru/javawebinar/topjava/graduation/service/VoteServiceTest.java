@@ -10,7 +10,6 @@ import static ru.javawebinar.topjava.graduation.UserTestData.USER;
 import static ru.javawebinar.topjava.graduation.UserTestData.USER_ID;
 import static ru.javawebinar.topjava.graduation.VoteTestData.*;
 
-//TODO fix lazy init problem
 class VoteServiceTest extends AbstractServiceTest {
 
     @Autowired
@@ -20,15 +19,16 @@ class VoteServiceTest extends AbstractServiceTest {
     void vote() {
         Vote newVote = new Vote(null, VOTE_DATE_TIME_NEW.toLocalDate(), RESTAURANT_2, USER);
         service.setClockAndTimeZone(VOTE_DATE_TIME_NEW);
-        service.vote(USER_ID, RESTAURANT_2_ID);
+        newVote.setId(service.vote(USER_ID, RESTAURANT_2_ID).getId());
         assertMatch(service.getForRestaurantAndDate(RESTAURANT_2_ID, VOTE_DATE_TIME_NEW.toLocalDate()), newVote);
     }
 
     @Test
     void voteUpdate() {
-        Vote newVote = new Vote(VOTE_ID, VOTE_DATE_TIME_BEFORE.toLocalDate(), RESTAURANT_2, USER);
+        Vote newVote = new Vote(null, VOTE_DATE_TIME_BEFORE.toLocalDate(), RESTAURANT_2, USER);
         service.setClockAndTimeZone(VOTE_DATE_TIME_BEFORE);
         Vote updated = service.vote(USER_ID, RESTAURANT_2_ID);
+        newVote.setId(updated.getId());
         assertMatch(updated, newVote);
     }
 
@@ -46,12 +46,12 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void getAllForRestaurant() {
-        assertMatch(service.getAllForRestaurant(RESTAURANT_1_ID), USER_VOTE_1, USER_VOTE_2, ADMIN_VOTE_1);
+        assertMatch(service.getAllForRestaurant(RESTAURANT_1_ID), USER_VOTE_1, ADMIN_VOTE_1, USER_VOTE_2);
     }
 
     @Test
     void getAll() {
-        assertMatch(service.getAll(Sort.unsorted()), USER_VOTE_1, USER_VOTE_2, ADMIN_VOTE_1, ADMIN_VOTE_2);
+        assertMatch(service.getAll(Sort.by(Sort.Direction.ASC, "user_id")), USER_VOTE_1, USER_VOTE_2, ADMIN_VOTE_1, ADMIN_VOTE_2);
     }
 
     @Test

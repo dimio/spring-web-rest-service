@@ -1,6 +1,5 @@
 package ru.javawebinar.topjava.graduation.web.user;
 
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -82,17 +81,13 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         assertMatch(userService.getByEmail("newemail@ya.ru"), UserUtil.updateFromTo(new User(USER), updatedTo));
     }
 
-    //TODO see AdminRestControllerTest, calling methods with email validation
-    @Disabled
     @Test
     @Transactional(propagation = Propagation.NEVER)
     void testDuplicate() throws Exception {
         UserTo updatedTo = new UserTo(null, "newName", "admin@gmail.com", "newPassword");
-
         mockMvc.perform(put(REST_URL).contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(USER))
             .content(JsonUtil.writeValue(updatedTo)))
-            //TODO status 422
             .andExpect(status().isBadRequest())
             .andDo(print());
     }

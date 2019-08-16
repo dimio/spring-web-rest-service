@@ -120,7 +120,7 @@ API path: `topjava_graduation/rest/admin/restaurants`
 `curl -s http://localhost:8080/topjava_graduation/rest/admin/restaurants/100002 -X POST -H 'Content-Type: application/json; charset=UTF-8' -d '{"name":"newMenu", "dishes":"newDishes", "priceInt":10, "priceFract":88}' --user admin@gmail.com:admin`
 
 * Update menu with specified ID to restaurant with specified ID:
-`curl -s -X PUT http://localhost:8080/topjava_graduation/rest/admin/restaurants/100002/100004 -d '{"name":"UpdatedName", "priceInt":999}' -H 'Content-Type:application/json;charset=UTF-8' --user admin@gmail.com:admin`
+`curl -s -X PUT http://localhost:8080/topjava_graduation/rest/admin/restaurants/100002/100004 -d '{"name":"UpdatedName", "added":"2019-06-27", "dishes":"new", "priceInt":999, "priceFract":3}' -H 'Content-Type:application/json;charset=UTF-8' --user admin@gmail.com:admin`
 
 * Delete menu with specified ID to restaurant with specified ID:
 `curl -s -X DELETE http://localhost:8080/topjava_graduation/rest/admin/restaurants/100002/100004 --user admin@gmail.com:admin`

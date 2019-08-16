@@ -67,7 +67,8 @@ public class RestaurantService {
     public void updateMenu(Integer restaurantId, Menu menu) throws NotFoundException {
         Assert.notNull(restaurantId, "restaurantId must be not null");
         Assert.notNull(menu, "menu must not be null");
-        menuRepository.save(menu);
+        menu.setRestaurant(restaurantRepository.getOne(restaurantId));
+        checkNotFoundWithId(menuRepository.save(menu), menu.getId());
     }
 
     public Menu getMenuForRestaurant(int restaurantId, int menuId) throws NotFoundException {

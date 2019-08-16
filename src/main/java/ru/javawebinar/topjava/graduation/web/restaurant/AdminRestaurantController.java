@@ -74,7 +74,7 @@ public class AdminRestaurantController {
 
     @PutMapping(value = "/{restaurantId}/{menuId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
-    public void updateMenu(@RequestBody Menu menu, @PathVariable int restaurantId, @PathVariable int menuId)
+    public void updateMenu(@Valid @RequestBody Menu menu, @PathVariable int restaurantId, @PathVariable int menuId)
         throws NotFoundException {
         log.info("update menu {} with id {} for restaurant {}", menu, menuId, restaurantId);
         assureIdConsistent(menu, menuId);

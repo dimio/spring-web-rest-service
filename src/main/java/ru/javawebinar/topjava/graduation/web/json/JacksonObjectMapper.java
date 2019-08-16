@@ -8,6 +8,8 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.hibernate5.Hibernate5Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
+import static com.fasterxml.jackson.core.JsonParser.Feature.ALLOW_NUMERIC_LEADING_ZEROS;
+
 /**
  * <p>
  * Handling Hibernate lazy-loading
@@ -29,6 +31,11 @@ public class JacksonObjectMapper extends ObjectMapper {
         setVisibility(PropertyAccessor.ALL, JsonAutoDetect.Visibility.NONE);
         setVisibility(PropertyAccessor.FIELD, JsonAutoDetect.Visibility.ANY);
         setSerializationInclusion(JsonInclude.Include.NON_NULL);
+
+        //NOTE: it's not working
+        // "JSON parse error: Invalid numeric value: Leading zeroes not allowed"
+        // https://stackoverflow.com/questions/55795970/how-to-enable-allow-numeric-leading-zeros-feature-to-allow-leading-zeroes-in-j
+        isEnabled(ALLOW_NUMERIC_LEADING_ZEROS);
     }
 
     public static ObjectMapper getMapper() {

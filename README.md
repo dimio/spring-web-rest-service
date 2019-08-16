@@ -27,7 +27,7 @@ API path: `topjava_graduation/rest/profile/votes`
 * To vote for restaurant with specified ID:
 `curl -s -X POST http://localhost:8080/topjava_graduation/rest/profile/votes/100002 --user user@yandex.ru:password`
 
-* Change the vote:
+* Change the vote (before decision time is end):
 `curl -s -X PUT http://localhost:8080/topjava_graduation/rest/profile/votes/100003 --user user@yandex.ru:password`
 
 * Get vote for current date:
@@ -38,6 +38,9 @@ API path: `topjava_graduation/rest/profile/votes`
 
 * Get all votes:
 `curl -s http://localhost:8080/topjava_graduation/rest/profile/votes/all --user user@yandex.ru:password`
+
+* Delete vote (before decision time is end):
+`curl -s -X DELETE http://localhost:8080/topjava_graduation/rest/profile/votes --user user@yandex.ru:password`
 
 ##### Restaurant:
 API path: `topjava_graduation/rest/profile/restaurants`

@@ -14,7 +14,7 @@ import java.time.LocalTime;
 @BatchSize(size = 200)
 public class Vote extends AbstractBaseEntity {
 
-    public static final LocalTime DECISION_TIME = LocalTime.of(11, 00);
+    public static final LocalTime DECISION_TIME = LocalTime.of(11, 0);
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)

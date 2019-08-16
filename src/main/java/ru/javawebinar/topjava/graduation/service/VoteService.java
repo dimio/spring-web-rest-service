@@ -39,6 +39,8 @@ public class VoteService {
         return vote(userId, restaurantId, LocalDate.now(clock), LocalTime.now(clock));
     }
 
+    //TODO: update vote if it exist, don't create new,
+    // if new vote restaurantId is equal to exist vote restaurantId - do nothing
     @Transactional
     Vote vote(Integer userId, Integer restaurantId, LocalDate date, LocalTime time) {
         Assert.notNull(userId, "userId must not be null");

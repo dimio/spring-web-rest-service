@@ -1,5 +1,5 @@
 # Graduation project
-Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) **without frontend**. See more: [graduation_en](https://github.com/dimio/topjava_graduation/blob/master/graduation_en.md) or [graduation_ru](https://github.com/dimio/topjava_graduation/blob/master/graduation_ru.md) .
+Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) **without frontend**. See more in expression of requirements: [graduation_en](https://github.com/dimio/topjava_graduation/blob/master/graduation_en.md) or [graduation_ru](https://github.com/dimio/topjava_graduation/blob/master/graduation_ru.md) .
 
 ## REST API
 Base path: `localhost:8080/rest`

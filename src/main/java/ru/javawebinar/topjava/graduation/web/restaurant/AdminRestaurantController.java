@@ -14,6 +14,7 @@ import ru.javawebinar.topjava.graduation.util.exception.NotFoundException;
 
 import javax.validation.Valid;
 import java.net.URI;
+import java.util.List;
 
 import static ru.javawebinar.topjava.graduation.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.graduation.util.ValidationUtil.checkNew;
@@ -59,6 +60,12 @@ public class AdminRestaurantController {
     public void deleteRestaurant(@PathVariable int restaurantId) throws NotFoundException {
         log.info("delete restaurant {}", restaurantId);
         restaurantService.delete(restaurantId);
+    }
+
+    @GetMapping(value = "/{restaurantId}/all", consumes = MediaType.ALL_VALUE)
+    public List<Menu> getAllMenusForRestaurant(@PathVariable int restaurantId) {
+        log.info("get all menus for restaurant {}", restaurantId);
+        return restaurantService.getAllMenusForRestaurant(restaurantId);
     }
 
     @PostMapping(value = "/{restaurantId}")

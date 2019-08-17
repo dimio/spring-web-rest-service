@@ -11,8 +11,11 @@ import ru.javawebinar.topjava.graduation.model.Restaurant;
 import ru.javawebinar.topjava.graduation.service.RestaurantService;
 import ru.javawebinar.topjava.graduation.web.AbstractControllerTest;
 
+import java.util.Map;
+
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.graduation.MenuTestData.*;
 import static ru.javawebinar.topjava.graduation.RestaurantTestData.*;
@@ -32,6 +35,16 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
     void testGetUnauth() throws Exception {
         mockMvc.perform(get(REST_URL))
             .andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void getAllMenusForRestaurant() throws Exception {
+        mockMvc.perform(get(REST_URL + "/{restaurantId}/all", RESTAURANT_1_ID)
+            .with(userHttpBasic(ADMIN)))
+            .andDo(print())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(status().isOk())
+            .andExpect(contentJson(MENU_R1_D28, MENU_R1_D27));
     }
 
     @Test
@@ -89,9 +102,9 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
 
         Menu returned = readFromJson(action, Menu.class);
         expected.setId(returned.getId());
+        expected.setAdded(returned.getAdded());
 
         assertMatch(returned, expected);
-
         assertMatch(restaurantService.getAllMenusForRestaurant(RESTAURANT_1_ID), expected, MENU_R1_D28, MENU_R1_D27);
     }
 
@@ -105,7 +118,7 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
         mockMvc.perform(put(REST_URL + "/{restaurantId}/{menuId}", RESTAURANT_1_ID, MENU_R1_D27.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(ADMIN))
-            .content(writeAdditionProps(updated, "restaurant", RESTAURANT_1)))
+            .content(writeAdditionProps(updated, Map.of("restaurant", RESTAURANT_1, "added", MENU_R1_D27.getAdded()))))
             .andDo(print())
             .andExpect(status().isNoContent());
 

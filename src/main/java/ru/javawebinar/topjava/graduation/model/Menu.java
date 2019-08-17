@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.graduation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -26,8 +27,9 @@ public class Menu extends AbstractNamedEntity {
 
     @NotNull
     @Column(name = "added", nullable = false, columnDefinition = "timestamp default now()")
-    //    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDate added;
+//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
+    private LocalDate added = LocalDate.now();
+    //    private LocalDate added;
 
     @NotBlank
     @Size(min = 1)
@@ -52,9 +54,14 @@ public class Menu extends AbstractNamedEntity {
         this(m.getId(), m.getName(), m.getAdded(), m.getDishes(), m.getPriceInt(), m.getPriceFract());
     }
 
+    public Menu(Integer id, String name, String dishes, Long priceInt, Long priceFract) {
+        this(id, name, LocalDate.now(), dishes, priceInt, priceFract);
+    }
+
     public Menu(Integer id, String name, LocalDate added, String dishes, Long priceInt, Long priceFract) {
         super(id, name);
-        setAdded(added);
+        //        setAdded(added);
+        this.added = added;
         this.dishes = dishes;
         this.priceInt = priceInt;
         this.priceFract = priceFract;
@@ -73,7 +80,8 @@ public class Menu extends AbstractNamedEntity {
     }
 
     public void setAdded(LocalDate added) {
-        this.added = (added == null) ? LocalDate.now() : added;
+        this.added = added;
+        //        this.added = (added == null) ? LocalDate.now() : added;
     }
 
     public String getDishes() {

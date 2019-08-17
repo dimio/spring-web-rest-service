@@ -22,6 +22,7 @@ public class UniqueMailValidator implements org.springframework.validation.Valid
         return HasEmail.class.isAssignableFrom(clazz);
     }
 
+    //ISSUE: by profile update with curl request, userTo has null id (not equal to user's id) and email will not valid
     @Override
     public void validate(Object target, Errors errors) {
         HasEmail user = ((HasEmail) target);

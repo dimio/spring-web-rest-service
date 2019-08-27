@@ -11,6 +11,7 @@ import ru.javawebinar.topjava.graduation.model.Restaurant;
 import ru.javawebinar.topjava.graduation.service.RestaurantService;
 import ru.javawebinar.topjava.graduation.web.AbstractControllerTest;
 
+import java.time.LocalDate;
 import java.util.Map;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -92,7 +93,7 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void addMenu() throws Exception {
-        Menu expected = new Menu(null, "New menu", null, "new dishes", 10L, 99L);
+        Menu expected = new Menu(null, null, "new dishes", 10, 99);
 
         ResultActions action = mockMvc.perform(post(REST_URL + "/{restaurantId}", RESTAURANT_1_ID)
             .with(userHttpBasic(ADMIN))
@@ -102,7 +103,7 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
 
         Menu returned = readFromJson(action, Menu.class);
         expected.setId(returned.getId());
-        expected.setAdded(returned.getAdded());
+        expected.setActual(returned.getActual());
 
         assertMatch(returned, expected);
         assertMatch(restaurantService.getAllMenusForRestaurant(RESTAURANT_1_ID), expected, MENU_R1_D28, MENU_R1_D27);
@@ -111,14 +112,15 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
     @Test
     void updateMenu() throws Exception {
         Menu updated = new Menu(MENU_R1_D27);
-        updated.setName("UpdatedName");
-        //        updated.setRestaurant(RESTAURANT_1);
-        updated.setPriceInt(9999L);
+        LocalDate actual = LocalDate.now();
+        updated.setDishes("Updated Dishes");
+        updated.setActual(actual);
+        updated.setPriceInt(9999);
 
         mockMvc.perform(put(REST_URL + "/{restaurantId}/{menuId}", RESTAURANT_1_ID, MENU_R1_D27.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(ADMIN))
-            .content(writeAdditionProps(updated, Map.of("restaurant", RESTAURANT_1, "added", MENU_R1_D27.getAdded()))))
+            .content(writeAdditionProps(updated, Map.of("restaurant", RESTAURANT_1, "actual", actual))))
             .andDo(print())
             .andExpect(status().isNoContent());
 

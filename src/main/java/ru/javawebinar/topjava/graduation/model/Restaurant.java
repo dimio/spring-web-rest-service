@@ -12,7 +12,7 @@ public class Restaurant extends AbstractNamedEntity {
 
     @Column
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    @OrderBy("added DESC")
+    @OrderBy("actual DESC")
     @BatchSize(size = 200)
     @JsonManagedReference
     private List<Menu> lunchMenus;

@@ -28,8 +28,8 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Override
     Optional<Menu> findById(Integer id);
 
-    //getBetween and getAll (query be generated with excluded limits startDate and endDate)
-    List<Menu> getByRestaurant_IdAndAddedBetweenOrderByAddedDesc(Integer restaurantId, LocalDate startDate, LocalDate endDate);
+    //getBetween and getAll
+    List<Menu> getByRestaurant_IdAndActualBetweenOrderByActualDesc(Integer restaurantId, LocalDate startDate, LocalDate endDate);
 
     @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant WHERE m.id=:id AND m.restaurant.id=:restaurantId")
     Menu getWithRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);

@@ -3,7 +3,7 @@ Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot
 
 ## REST API
 Base path: `localhost:8080/rest`
-Base path for this project: `localhost:8080/rest/topjava_graduation/`
+Base path for this project (deployed into "topjava_graduation"): `localhost:8080/topjava_graduation/rest/`
 
 Simple API checking (run this shell command in the project directory after project deploy):
 ```

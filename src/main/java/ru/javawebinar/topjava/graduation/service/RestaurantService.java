@@ -78,14 +78,11 @@ public class RestaurantService {
     }
 
     public List<Menu> getMenusForRestaurantBetweenDate(int restaurantId, LocalDate startDate, LocalDate endDate) throws NotFoundException {
-        //include limits startDate and endDate in auto-generated query
-        startDate = startDate.minusDays(1);
-        endDate = endDate.plusDays(1);
-        return menuRepository.getByRestaurant_IdAndAddedBetweenOrderByAddedDesc(restaurantId, startDate, endDate);
+        return menuRepository.getByRestaurant_IdAndActualBetweenOrderByActualDesc(restaurantId, startDate, endDate);
     }
 
     public List<Menu> getAllMenusForRestaurant(int restaurantId) throws NotFoundException {
-        return menuRepository.getByRestaurant_IdAndAddedBetweenOrderByAddedDesc(
+        return menuRepository.getByRestaurant_IdAndActualBetweenOrderByActualDesc(
             restaurantId, MIN_DATE, MAX_DATE
         );
     }

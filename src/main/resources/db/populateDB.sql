@@ -1,10 +1,15 @@
 -- noinspection SqlWithoutWhereForFile
 
-DELETE FROM user_roles;
-DELETE FROM votes;
-DELETE FROM users;
-DELETE FROM restaurants;
-DELETE FROM menus;
+DELETE
+FROM user_roles;
+DELETE
+FROM votes;
+DELETE
+FROM users;
+DELETE
+FROM restaurants;
+DELETE
+FROM menus;
 ALTER SEQUENCE global_seq RESTART WITH 100000;
 
 INSERT INTO users (name, email, password)
@@ -21,12 +26,12 @@ INSERT INTO restaurants(name)
 VALUES ('McDownalds'),
        ('Dock Clownalds');
 
-INSERT INTO menus(restaurant_id, name, added, dishes, price_int, price_fract)
-VALUES (100002, 'menuR1', '2019-06-27 10:00:00', 'A, B', 99, 99),
-       (100002, 'menuR1', '2019-06-28 10:00:00', 'A, C', 101, 55),
+INSERT INTO menus(restaurant_id, actual, dishes, price_int, price_fract)
+VALUES (100002, '2019-06-27', 'A, B', 99, 99),
+       (100002, '2019-06-28', 'A, C', 101, 55),
 
-       (100003, 'menuR2', '2019-06-27 10:02:00', 'B, C', 100, 00),
-       (100003, 'menuR2', '2019-06-28 10:02:00', 'B, D', 98, 30);
+       (100003, '2019-06-27', 'B, C', 100, 00),
+       (100003, '2019-06-28', 'B, D', 98, 30);
 
 INSERT INTO votes (user_id, restaurant_id, date)
 VALUES (100000, 100002, '2019-06-27'),

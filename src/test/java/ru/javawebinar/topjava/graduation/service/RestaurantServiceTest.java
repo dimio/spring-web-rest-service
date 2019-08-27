@@ -67,8 +67,9 @@ class RestaurantServiceTest extends AbstractControllerTest {
     @Test
     void updateMenu() {
         Menu updated = new Menu(MENU_R1_D27);
-        updated.setName("UpdatedName");
+        updated.setDishes("UpdatedDishes");
         updated.setRestaurant(RESTAURANT_1);
+        updated.setActual(LocalDate.now());
         service.updateMenu(RESTAURANT_1_ID, updated);
         assertMatch(service.getMenuForRestaurant(RESTAURANT_1_ID, MENU_ID), updated);
     }

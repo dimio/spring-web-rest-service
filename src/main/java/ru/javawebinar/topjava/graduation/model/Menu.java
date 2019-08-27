@@ -1,11 +1,9 @@
 package ru.javawebinar.topjava.graduation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonProperty;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.Range;
 import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.*;
@@ -15,9 +13,9 @@ import javax.validation.constraints.Size;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"added", "name", "restaurant_id"}, name = "menus_unique_added_name_restaurant_idx")})
+@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "actual", "dishes"}, name = "menus_unique_restaurant_actual_dishes_idx")})
 @BatchSize(size = 200)
-public class Menu extends AbstractNamedEntity {
+public class Menu extends AbstractBaseEntity {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id", nullable = false)
@@ -26,42 +24,36 @@ public class Menu extends AbstractNamedEntity {
     private Restaurant restaurant;
 
     @NotNull
-    @Column(name = "added", nullable = false, columnDefinition = "timestamp default now()")
-//    @JsonProperty(access = JsonProperty.Access.READ_ONLY)
-    private LocalDate added = LocalDate.now();
-    //    private LocalDate added;
+    @Column(name = "actual", nullable = false, columnDefinition = "date default now()")
+    private LocalDate actual = LocalDate.now();
 
     @NotBlank
-    @Size(min = 1)
+    @Size(min = 1, max = 8000)
     @SafeHtml
     @Column(name = "dishes", nullable = false)
     private String dishes;
 
-    @NotNull
-    @Range(min = 0)
     @Column(name = "price_int", nullable = false)
-    private Long priceInt;
+    private Integer priceInt;
 
-    @NotNull
-    @Range(min = 0)
     @Column(name = "price_fract", nullable = false)
-    private Long priceFract;
+    private Integer priceFract;
 
     public Menu() {
     }
 
     public Menu(Menu m) {
-        this(m.getId(), m.getName(), m.getAdded(), m.getDishes(), m.getPriceInt(), m.getPriceFract());
+        this(m.getId(), m.getActual(), m.getDishes(), m.getPriceInt(), m.getPriceFract());
     }
 
-    public Menu(Integer id, String name, String dishes, Long priceInt, Long priceFract) {
-        this(id, name, LocalDate.now(), dishes, priceInt, priceFract);
+    public Menu(Integer id, String dishes, Integer priceInt, Integer priceFract) {
+        this(id, LocalDate.now(), dishes, priceInt, priceFract);
     }
 
-    public Menu(Integer id, String name, LocalDate added, String dishes, Long priceInt, Long priceFract) {
-        super(id, name);
+    public Menu(Integer id, LocalDate actual, String dishes, Integer priceInt, Integer priceFract) {
+        super(id);
         //        setAdded(added);
-        this.added = added;
+        this.actual = actual;
         this.dishes = dishes;
         this.priceInt = priceInt;
         this.priceFract = priceFract;
@@ -75,12 +67,12 @@ public class Menu extends AbstractNamedEntity {
         this.restaurant = restaurant;
     }
 
-    public LocalDate getAdded() {
-        return added;
+    public LocalDate getActual() {
+        return actual;
     }
 
-    public void setAdded(LocalDate added) {
-        this.added = added;
+    public void setActual(LocalDate actual) {
+        this.actual = actual;
         //        this.added = (added == null) ? LocalDate.now() : added;
     }
 
@@ -92,19 +84,19 @@ public class Menu extends AbstractNamedEntity {
         this.dishes = dishes;
     }
 
-    public Long getPriceInt() {
+    public Integer getPriceInt() {
         return priceInt;
     }
 
-    public void setPriceInt(Long priceInt) {
+    public void setPriceInt(Integer priceInt) {
         this.priceInt = priceInt;
     }
 
-    public Long getPriceFract() {
+    public Integer getPriceFract() {
         return priceFract;
     }
 
-    public void setPriceFract(Long priceFract) {
+    public void setPriceFract(Integer priceFract) {
         this.priceFract = priceFract;
     }
 
@@ -112,8 +104,7 @@ public class Menu extends AbstractNamedEntity {
     public String toString() {
         return "Menu{" +
             "id=" + id +
-            ", restaurant=" + restaurant +
-            ", added=" + added +
+            ", actual=" + actual +
             ", dishes='" + dishes + '\'' +
             ", priceInt=" + priceInt +
             ", priceFract=" + priceFract +

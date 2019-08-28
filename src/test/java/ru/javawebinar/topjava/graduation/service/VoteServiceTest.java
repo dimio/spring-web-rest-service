@@ -6,8 +6,8 @@ import org.springframework.data.domain.Sort;
 import ru.javawebinar.topjava.graduation.model.Vote;
 
 import static ru.javawebinar.topjava.graduation.RestaurantTestData.*;
-import static ru.javawebinar.topjava.graduation.UserTestData.USER;
-import static ru.javawebinar.topjava.graduation.UserTestData.USER_ID;
+import static ru.javawebinar.topjava.graduation.UserTestData.*;
+import static ru.javawebinar.topjava.graduation.VoteTestData.assertMatch;
 import static ru.javawebinar.topjava.graduation.VoteTestData.*;
 
 class VoteServiceTest extends AbstractServiceTest {
@@ -16,25 +16,34 @@ class VoteServiceTest extends AbstractServiceTest {
     protected VoteService service;
 
     @Test
-    void vote() {
-        Vote newVote = new Vote(null, VOTE_DATE_TIME_NEW.toLocalDate(), RESTAURANT_2, USER);
-        service.setClockAndTimeZone(VOTE_DATE_TIME_NEW);
+    void voteNewBeforeDecisionTime() {
+        Vote newVote = new Vote(null, VOTE_DATE_TIME_NEW_BEFORE.toLocalDate(), RESTAURANT_2, USER);
+        service.setClockAndTimeZone(VOTE_DATE_TIME_NEW_BEFORE);
         newVote.setId(service.vote(USER_ID, RESTAURANT_2_ID).getId());
-        assertMatch(service.getForRestaurantAndDate(RESTAURANT_2_ID, VOTE_DATE_TIME_NEW.toLocalDate()), newVote);
+        assertMatch(service.getForRestaurantAndDate(RESTAURANT_2_ID, VOTE_DATE_TIME_NEW_AFTER.toLocalDate()), newVote);
 
     }
 
     @Test
-    void voteUpdate() {
+    void voteNewAfterDecisionTime() {
+        Vote newVote = new Vote(null, VOTE_DATE_TIME_NEW_AFTER.toLocalDate(), RESTAURANT_2, ADMIN);
+        service.setClockAndTimeZone(VOTE_DATE_TIME_NEW_AFTER);
+        newVote.setId(service.vote(ADMIN_ID, RESTAURANT_2_ID).getId());
+        assertMatch(service.getForRestaurantAndDate(RESTAURANT_2_ID, VOTE_DATE_TIME_NEW_AFTER.toLocalDate()), newVote);
+    }
+
+    @Test
+    void voteUpdateBeforeDecisionTime() {
         Vote newVote = new Vote(null, VOTE_DATE_TIME_BEFORE.toLocalDate(), RESTAURANT_2, USER);
         service.setClockAndTimeZone(VOTE_DATE_TIME_BEFORE);
         Vote updated = service.vote(USER_ID, RESTAURANT_2_ID);
         newVote.setId(updated.getId());
         assertMatch(updated, newVote);
+        assertMatch(service.getForRestaurantAndDate(RESTAURANT_2_ID, VOTE_DATE_TIME_BEFORE.toLocalDate()), ADMIN_VOTE_2, updated);
     }
 
     @Test
-    void voteAfterDecisionTime() {
+    void voteUpdateAfterDecisionTime() {
         service.setClockAndTimeZone(VOTE_DATE_TIME_AFTER);
         service.vote(USER_ID, RESTAURANT_2_ID);
         assertMatch(service.getForRestaurantAndDate(RESTAURANT_2_ID, VOTE_DATE_TIME_AFTER.toLocalDate()), ADMIN_VOTE_2);
@@ -57,7 +66,7 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void getForUserAndDate() {
-        assertMatch(service.getForUserAndDate(USER_ID, VOTE_DATE_TIME_BEFORE.toLocalDate()), USER_VOTE_1);
+        assertMatch(service.getForUserAndDate(USER_ID, VOTE_DATE_TIME_BEFORE.toLocalDate()), USER_VOTE_2);
     }
 
     @Test

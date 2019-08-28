@@ -19,8 +19,9 @@ import static ru.javawebinar.topjava.graduation.model.AbstractBaseEntity.START_S
 public class VoteTestData {
     public static final int VOTE_ID = START_SEQ + 8;
 
-    public static final LocalDateTime VOTE_DATE_TIME_NEW = LocalDateTime.of(2019, 6, 29, 10, 5);
-    public static final LocalDateTime VOTE_DATE_TIME_BEFORE = LocalDateTime.of(2019, 6, 27, 10, 3);
+    public static final LocalDateTime VOTE_DATE_TIME_NEW_BEFORE = LocalDateTime.of(2019, 6, 29, 10, 5);
+    public static final LocalDateTime VOTE_DATE_TIME_NEW_AFTER = LocalDateTime.of(2019, 6, 29, 11, 5);
+    public static final LocalDateTime VOTE_DATE_TIME_BEFORE = LocalDateTime.of(2019, 6, 28, 10, 3);
     public static final LocalDateTime VOTE_DATE_TIME_AFTER = LocalDateTime.of(2019, 6, 28, 11, 5);
 
     public static final Vote USER_VOTE_1 = new Vote(VOTE_ID, LocalDate.of(2019, 6, 27), RESTAURANT_1, USER);
@@ -30,7 +31,7 @@ public class VoteTestData {
     public static final Vote ADMIN_VOTE_2 = new Vote(VOTE_ID + 3, LocalDate.of(2019, 6, 28), RESTAURANT_2, ADMIN);
 
     public static void assertMatch(Vote actual, Vote expected) {
-        assertThat(actual).isEqualToIgnoringGivenFields(expected, "id", "user", "restaurant");
+        assertThat(actual).isEqualToIgnoringGivenFields(expected, "user", "restaurant");
     }
 
     public static void assertMatch(Iterable<Vote> actual, Vote... expected) {
@@ -38,7 +39,7 @@ public class VoteTestData {
     }
 
     public static void assertMatch(Iterable<Vote> actual, Iterable<Vote> expected) {
-        assertThat(actual).usingElementComparatorIgnoringFields("id", "user", "restaurant").isEqualTo(expected);
+        assertThat(actual).usingElementComparatorIgnoringFields("user", "restaurant").isEqualTo(expected);
     }
 
     public static ResultMatcher contentJson(Vote... expected) {

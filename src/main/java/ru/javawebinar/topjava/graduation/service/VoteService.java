@@ -39,26 +39,31 @@ public class VoteService {
         return vote(userId, restaurantId, LocalDate.now(clock), LocalTime.now(clock));
     }
 
-    //TODO: update vote if it exist, don't create new,
-    // if new vote restaurantId is equal to exist vote restaurantId - do nothing
     @Transactional
     Vote vote(Integer userId, Integer restaurantId, LocalDate date, LocalTime time) {
         Assert.notNull(userId, "userId must not be null");
         Assert.notNull(restaurantId, "restaurantId must not be null");
-        Vote vote = null;
-        if (time.isBefore(DECISION_TIME)){
-            vote = getForUserAndDate(userId, date);
-            if (vote != null){
-                voteRepository.deleteById(vote.getId());
-            }
+
+        Vote vote = getForUserAndDate(userId, date);
+
+        if (vote == null){
             vote = new Vote(
                 null, date,
                 restaurantRepository.getOne(restaurantId),
                 userRepository.getOne(userId)
             );
-            vote = voteRepository.save(vote);
+            return voteRepository.save(vote);
         }
-        return vote;
+        else {
+            if (time.isBefore(DECISION_TIME)){
+                if (restaurantId.equals(vote.getRestaurant().getId())){
+                    return vote;
+                }
+                vote.setRestaurant(restaurantRepository.getOne(restaurantId));
+                return voteRepository.save(vote);
+            }
+            return null;
+        }
     }
 
     @Transactional
@@ -85,11 +90,10 @@ public class VoteService {
         return voteRepository.findAll(sort);
     }
 
-    //make DateBetween for most universality?
+    //voteRepository.findByUserIdAndDateBetween(date, date) is equal to findByUserIdAndDate
     public Vote getForUserAndDate(Integer userId, LocalDate date) {
         List<Vote> votes = voteRepository.findByUserIdAndDateBetween(userId, date, date);
-        // use Optional votes.stream().findXXX ?
-        return votes.isEmpty() ? null : votes.get(0);
+        return votes.isEmpty() ? null : votes.get(votes.size() - 1);
     }
 
     //make DateBetween for most universality?

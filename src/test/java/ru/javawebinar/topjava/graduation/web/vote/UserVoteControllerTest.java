@@ -33,13 +33,13 @@ class UserVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void testGetUnauth() throws Exception {
+    void getUnauth() throws Exception {
         mockMvc.perform(get(REST_URL))
             .andExpect(status().isUnauthorized());
     }
 
     @Test
-    void testGetForCurrentDate() throws Exception {
+    void getForCurrentDate() throws Exception {
         mockMvc.perform(get(REST_URL)
             .with(userHttpBasic(USER)))
             .andDo(print())
@@ -47,17 +47,37 @@ class UserVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void testGetAll() throws Exception {
+    void getAll() throws Exception {
         mockMvc.perform(get(REST_URL + "/all")
             .with(userHttpBasic(USER)))
             .andDo(print())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(contentJson(USER_VOTE_2, USER_VOTE_1));
+            .andExpect(contentJson(USER_VOTE_1, USER_VOTE_2));
     }
 
     @Test
-    void testVoteUpdateBefore() throws Exception {
+    void voteNewBeforeDecisionTime() throws Exception {
+        service.setClockAndTimeZone(VOTE_DATE_TIME_NEW_AFTER);
+        mockMvc.perform(post(REST_URL + '/' + RESTAURANT_2_ID).contentType(MediaType.APPLICATION_JSON)
+            .with(userHttpBasic(USER)))
+            .andDo(print())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(status().isCreated());
+    }
+
+    @Test
+    void voteNewAfterDecisionTime() throws Exception {
+        service.setClockAndTimeZone(VOTE_DATE_TIME_NEW_AFTER);
+        mockMvc.perform(post(REST_URL + '/' + RESTAURANT_2_ID).contentType(MediaType.APPLICATION_JSON)
+            .with(userHttpBasic(USER)))
+            .andDo(print())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(status().isCreated());
+    }
+
+    @Test
+    void voteUpdateBeforeDecisionTime() throws Exception {
         service.setClockAndTimeZone(VOTE_DATE_TIME_BEFORE);
         mockMvc.perform(put(REST_URL + '/' + RESTAURANT_2_ID).contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(USER)))
@@ -67,18 +87,7 @@ class UserVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-        //make matching new vote date?
-    void testVoteNewBefore() throws Exception {
-        service.setClockAndTimeZone(VOTE_DATE_TIME_NEW);
-        mockMvc.perform(post(REST_URL + '/' + RESTAURANT_2_ID).contentType(MediaType.APPLICATION_JSON)
-            .with(userHttpBasic(USER)))
-            .andDo(print())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(status().isCreated());
-    }
-
-    @Test
-    void testVoteAfter() throws Exception {
+    void voteUpdateAfterDecisionTime() throws Exception {
         service.setClockAndTimeZone(VOTE_DATE_TIME_AFTER);
         mockMvc.perform(post(REST_URL + '/' + RESTAURANT_2_ID).contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(USER)))

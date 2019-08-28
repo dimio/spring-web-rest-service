@@ -20,11 +20,12 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     // find... vs get... ? https://stackoverflow.com/a/24486114/11130103
     List<Vote> findAllByUserId(int userId);
 
-    //    Vote findByUserIdAndDate(int userId, LocalDateTime dateTime);
+    //equal to findByUserIdAndDate if dateFrom == dateTo
     List<Vote> findByUserIdAndDateBetween(int userId, @NotNull LocalDate dateFrom, @NotNull LocalDate dateTo);
 
     List<Vote> findByRestaurantId(int restaurantId);
 
+    //equal to findByRestaurantIdAndDate if dateFrom == dateTo
     List<Vote> findByRestaurantIdAndDateBetween(int restaurantId, LocalDate dateFrom, LocalDate dateTo);
 
 }

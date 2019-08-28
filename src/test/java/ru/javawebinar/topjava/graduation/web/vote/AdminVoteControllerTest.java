@@ -31,18 +31,8 @@ class AdminVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void testGetAll() throws Exception {
-        mockMvc.perform(get(REST_URL)
-            .with(userHttpBasic(ADMIN)))
-            .andDo(print())
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(contentJson(USER_VOTE_2, ADMIN_VOTE_2, USER_VOTE_1, ADMIN_VOTE_1));
-    }
-
-    @Test
     void testGetAllForUser() throws Exception {
-        mockMvc.perform(get(REST_URL + "/user/{userId}/all", USER_ID)
+        mockMvc.perform(get(REST_URL + "/user/{userId}/votes/all", USER_ID)
             .with(userHttpBasic(ADMIN)))
             .andDo(print())
             .andExpect(status().isOk())
@@ -52,7 +42,7 @@ class AdminVoteControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetForUserAndDate() throws Exception {
-        mockMvc.perform(get(REST_URL + "/user/{userId}", USER_ID)
+        mockMvc.perform(get(REST_URL + "/user/{userId}/votes", USER_ID)
             .param("date", "2019-06-27")
             .with(userHttpBasic(ADMIN)))
             .andDo(print())
@@ -63,7 +53,7 @@ class AdminVoteControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetAllForRestaurant() throws Exception {
-        mockMvc.perform(get(REST_URL + "/restaurant/{restaurantId}/all", RESTAURANT_2_ID)
+        mockMvc.perform(get(REST_URL + "/restaurant/{restaurantId}/votes/all", RESTAURANT_2_ID)
             .with(userHttpBasic(ADMIN)))
             .andDo(print())
             .andExpect(status().isOk())
@@ -73,7 +63,7 @@ class AdminVoteControllerTest extends AbstractControllerTest {
 
     @Test
     void testGetForRestaurantAndDate() throws Exception {
-        mockMvc.perform(get(REST_URL + "/restaurant/{restaurantId}", RESTAURANT_2_ID)
+        mockMvc.perform(get(REST_URL + "/restaurant/{restaurantId}/votes", RESTAURANT_2_ID)
             .param("date", "2019-06-28")
             .with(userHttpBasic(ADMIN)))
             .andDo(print())

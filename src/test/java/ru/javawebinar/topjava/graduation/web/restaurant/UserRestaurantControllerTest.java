@@ -1,7 +1,9 @@
 package ru.javawebinar.topjava.graduation.web.restaurant;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import ru.javawebinar.topjava.graduation.service.VoteService;
 import ru.javawebinar.topjava.graduation.web.AbstractControllerTest;
 
 import java.util.Collections;
@@ -20,6 +22,9 @@ import static ru.javawebinar.topjava.graduation.web.restaurant.UserRestaurantCon
 
 class UserRestaurantControllerTest extends AbstractControllerTest {
 
+    @Autowired
+    protected VoteService service;
+
     @Test
     void testGetUnauth() throws Exception {
         mockMvc.perform(get(REST_URL))
@@ -27,13 +32,15 @@ class UserRestaurantControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getAllRestaurants() throws Exception {
-        mockMvc.perform(get(REST_URL + "/all")
+    void getAllActual() throws Exception {
+        mockMvc.perform(get(REST_URL)
             .with(userHttpBasic(USER)))
+            .andExpect(status().isOk())
             .andDo(print())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(contentJsonRestaurant(RESTAURANT_1, RESTAURANT_2));
+            .andDo(print())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON));
     }
 
     @Test

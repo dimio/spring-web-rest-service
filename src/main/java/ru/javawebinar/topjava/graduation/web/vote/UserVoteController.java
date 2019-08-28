@@ -15,7 +15,6 @@ import ru.javawebinar.topjava.graduation.service.VoteService;
 
 import java.net.URI;
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping(value = UserVoteController.REST_URL, produces = MediaType.APPLICATION_JSON_VALUE)
@@ -62,12 +61,5 @@ public class UserVoteController {
         //        LocalDate currentDate = date.orElse(LocalDate.now());
         log.info("get vote for user {} and date {}", userId, date);
         return service.getForUserAndDate(userId, date);
-    }
-
-    @GetMapping(value = "/all")
-    public List<Vote> getAll(@AuthenticationPrincipal AuthorizedUser authUser) {
-        int userId = authUser.getId();
-        log.info("get all votes for user {}", userId);
-        return service.getAllForUser(userId);
     }
 }

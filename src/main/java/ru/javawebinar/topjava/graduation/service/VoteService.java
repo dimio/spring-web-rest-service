@@ -1,9 +1,9 @@
 package ru.javawebinar.topjava.graduation.service;
 
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import ru.javawebinar.topjava.graduation.model.Restaurant;
 import ru.javawebinar.topjava.graduation.model.Vote;
 import ru.javawebinar.topjava.graduation.repository.RestaurantRepository;
 import ru.javawebinar.topjava.graduation.repository.UserRepository;
@@ -43,16 +43,13 @@ public class VoteService {
     Vote vote(Integer userId, Integer restaurantId, LocalDate date, LocalTime time) {
         Assert.notNull(userId, "userId must not be null");
         Assert.notNull(restaurantId, "restaurantId must not be null");
-
         Vote vote = getForUserAndDate(userId, date);
-
         if (vote == null){
-            vote = new Vote(
-                null, date,
-                restaurantRepository.getOne(restaurantId),
-                userRepository.getOne(userId)
-            );
-            return voteRepository.save(vote);
+            Restaurant restaurant = restaurantRepository.getOne(restaurantId);
+            //            if (!restaurantRepository.getAllWithMenuForDate(date).contains(restaurant)){
+            //                return null;
+            //            }
+            return voteRepository.save(new Vote(null, date, restaurant, userRepository.getOne(userId)));
         }
         else {
             if (time.isBefore(DECISION_TIME)){
@@ -84,10 +81,6 @@ public class VoteService {
 
     public List<Vote> getAllForRestaurant(Integer restaurantId) {
         return voteRepository.findByRestaurantId(restaurantId);
-    }
-
-    public List<Vote> getAll(Sort sort) {
-        return voteRepository.findAll(sort);
     }
 
     //voteRepository.findByUserIdAndDateBetween(date, date) is equal to findByUserIdAndDate

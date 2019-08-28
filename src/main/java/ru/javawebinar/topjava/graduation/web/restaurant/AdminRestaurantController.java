@@ -62,24 +62,24 @@ public class AdminRestaurantController {
         restaurantService.delete(restaurantId);
     }
 
-    @GetMapping(value = "/{restaurantId}/all", consumes = MediaType.ALL_VALUE)
+    @GetMapping(value = "/{restaurantId}/menus", consumes = MediaType.ALL_VALUE)
     public List<Menu> getAllMenusForRestaurant(@PathVariable int restaurantId) {
         log.info("get all menus for restaurant {}", restaurantId);
         return restaurantService.getAllMenusForRestaurant(restaurantId);
     }
 
-    @PostMapping(value = "/{restaurantId}")
+    @PostMapping(value = "/{restaurantId}/menus")
     public ResponseEntity<Menu> addMenu(@Valid @RequestBody Menu menu, @PathVariable int restaurantId) {
         log.info("add menu {} for restaurant {}", menu, restaurantId);
         checkNew(menu);
         Menu newMenu = restaurantService.addMenu(restaurantId, menu);
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
-            .path(REST_URL + '/' + restaurantId + "/{menuId}")
+            .path(REST_URL + '/' + restaurantId + "/menus/{menuId}")
             .buildAndExpand(newMenu.getId()).toUri();
         return ResponseEntity.created(uriOfNewResource).body(newMenu);
     }
 
-    @PutMapping(value = "/{restaurantId}/{menuId}")
+    @PutMapping(value = "/{restaurantId}/menus/{menuId}")
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void updateMenu(@Valid @RequestBody Menu menu, @PathVariable int restaurantId, @PathVariable int menuId)
         throws NotFoundException {
@@ -88,7 +88,7 @@ public class AdminRestaurantController {
         restaurantService.updateMenu(restaurantId, menu);
     }
 
-    @DeleteMapping(value = "/{restaurantId}/{menuId}", consumes = MediaType.ALL_VALUE)
+    @DeleteMapping(value = "/{restaurantId}/menus/{menuId}", consumes = MediaType.ALL_VALUE)
     @ResponseStatus(value = HttpStatus.NO_CONTENT)
     public void deleteMenu(@PathVariable int restaurantId, @PathVariable int menuId) throws NotFoundException {
         log.info("delete menu {} for restaurant {}", menuId, restaurantId);

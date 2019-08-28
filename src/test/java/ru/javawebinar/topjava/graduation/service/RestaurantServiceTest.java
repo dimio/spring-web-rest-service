@@ -43,7 +43,7 @@ class RestaurantServiceTest extends AbstractControllerTest {
     void get() {
         Restaurant restaurant = service.get(RESTAURANT_1_ID);
         assertMatchRestaurant(restaurant, RESTAURANT_1);
-        assertMatch(restaurant.getLunchMenus(), MENU_R1_D28, MENU_R1_D27);
+        assertMatch(restaurant.getLunchMenus(), MENU_R1_D29, MENU_R1_D28, MENU_R1_D27);
     }
 
     @Test
@@ -53,15 +53,20 @@ class RestaurantServiceTest extends AbstractControllerTest {
     }
 
     @Test
+    void getAllActualForDate() {
+        assertMatchRestaurant(service.getAllWithMenuForDate(LocalDate.of(2019, 6, 27)), RESTAURANT_2, RESTAURANT_1);
+    }
+
+    @Test
     void addMenu() {
         service.addMenu(RESTAURANT_1_ID, MENU_R2_D27);
-        assertMatch(service.getAllMenusForRestaurant(RESTAURANT_1_ID), MENU_R1_D28, MENU_R1_D27, MENU_R2_D27);
+        assertMatch(service.getAllMenusForRestaurant(RESTAURANT_1_ID), MENU_R1_D29, MENU_R1_D28, MENU_R1_D27, MENU_R2_D27);
     }
 
     @Test
     void deleteMenu() {
         service.deleteMenu(RESTAURANT_1_ID, MENU_ID);
-        assertMatch(service.getAllMenusForRestaurant(RESTAURANT_1_ID), MENU_R1_D28);
+        assertMatch(service.getAllMenusForRestaurant(RESTAURANT_1_ID), MENU_R1_D29, MENU_R1_D28);
     }
 
     @Test
@@ -88,6 +93,6 @@ class RestaurantServiceTest extends AbstractControllerTest {
 
     @Test
     void getAllMenusForRestaurant() {
-        assertMatch(service.getAllMenusForRestaurant(RESTAURANT_2_ID), MENU_R2_D28, MENU_R2_D27);
+        assertMatch(service.getAllMenusForRestaurant(RESTAURANT_2_ID), MENU_R2_D29, MENU_R2_D28, MENU_R2_D27);
     }
 }

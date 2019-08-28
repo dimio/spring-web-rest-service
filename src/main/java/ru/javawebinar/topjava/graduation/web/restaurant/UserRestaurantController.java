@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.graduation.web.restaurant;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.data.domain.Sort;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -30,13 +29,10 @@ public class UserRestaurantController {
         this.restaurantService = restaurantService;
     }
 
-    @GetMapping(value = "/all")
-    //public List<Restaurant> getAllRestaurants(@RequestParam(required = false) Sort sort) {
-    public List<Restaurant> getAllRestaurants() {
-        //converter needed
-        //sort = (sort == null) ? Sort.unsorted() : sort;
-        log.info("get all restaurants");
-        return restaurantService.getAll(Sort.unsorted());
+    @GetMapping
+    public List<Restaurant> getAllActual() {
+        log.info("get all actual restaurants");
+        return restaurantService.getAllWithMenuForDate(LocalDate.now());
     }
 
     @GetMapping(value = "/{restaurantId}")

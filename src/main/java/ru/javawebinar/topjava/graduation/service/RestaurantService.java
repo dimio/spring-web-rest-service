@@ -53,6 +53,10 @@ public class RestaurantService {
         return restaurantRepository.findAll(sort);
     }
 
+    public List<Restaurant> getAllWithMenuForDate(LocalDate date) {
+        return restaurantRepository.getAllWithMenuForDate(date);
+    }
+
     @Transactional
     public Menu addMenu(Integer restaurantId, Menu menu) {
         Assert.notNull(restaurantId, "restaurantId must be not null");

@@ -29,9 +29,11 @@ VALUES ('McDownalds'),
 INSERT INTO menus(restaurant_id, actual, dishes, price_int, price_fract)
 VALUES (100002, '2019-06-27', 'A, B', 99, 99),
        (100002, '2019-06-28', 'A, C', 101, 55),
+       (100002, '2019-06-29', 'A, D', 101, 55),
 
        (100003, '2019-06-27', 'B, C', 100, 00),
-       (100003, '2019-06-28', 'B, D', 98, 30);
+       (100003, '2019-06-28', 'B, D', 98, 30),
+       (100003, '2019-06-29', 'B, A', 98, 30);
 
 INSERT INTO votes (user_id, restaurant_id, date)
 VALUES (100000, 100002, '2019-06-27'),

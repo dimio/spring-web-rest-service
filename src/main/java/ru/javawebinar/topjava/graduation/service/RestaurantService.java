@@ -3,6 +3,7 @@ package ru.javawebinar.topjava.graduation.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import ru.javawebinar.topjava.graduation.model.Menu;
 import ru.javawebinar.topjava.graduation.model.Restaurant;
@@ -52,6 +53,7 @@ public class RestaurantService {
         return restaurantRepository.findAll(sort);
     }
 
+    @Transactional
     public Menu addMenu(Integer restaurantId, Menu menu) {
         Assert.notNull(restaurantId, "restaurantId must be not null");
         Assert.notNull(menu, "menu must not be null");
@@ -64,6 +66,7 @@ public class RestaurantService {
         menuRepository.deleteById(menuId);
     }
 
+    @Transactional
     public void updateMenu(Integer restaurantId, Menu menu) throws NotFoundException {
         Assert.notNull(restaurantId, "restaurantId must be not null");
         Assert.notNull(menu, "menu must not be null");

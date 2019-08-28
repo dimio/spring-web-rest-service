@@ -47,16 +47,6 @@ class UserVoteControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getAll() throws Exception {
-        mockMvc.perform(get(REST_URL + "/all")
-            .with(userHttpBasic(USER)))
-            .andDo(print())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk())
-            .andExpect(contentJson(USER_VOTE_1, USER_VOTE_2));
-    }
-
-    @Test
     void voteNewBeforeDecisionTime() throws Exception {
         service.setClockAndTimeZone(VOTE_DATE_TIME_NEW_AFTER);
         mockMvc.perform(post(REST_URL + '/' + RESTAURANT_2_ID).contentType(MediaType.APPLICATION_JSON)

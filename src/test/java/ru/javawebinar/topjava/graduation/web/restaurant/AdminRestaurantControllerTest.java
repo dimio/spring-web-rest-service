@@ -40,12 +40,12 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void getAllMenusForRestaurant() throws Exception {
-        mockMvc.perform(get(REST_URL + "/{restaurantId}/all", RESTAURANT_1_ID)
+        mockMvc.perform(get(REST_URL + "/{restaurantId}/menus", RESTAURANT_1_ID)
             .with(userHttpBasic(ADMIN)))
             .andDo(print())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
-            .andExpect(contentJson(MENU_R1_D28, MENU_R1_D27));
+            .andExpect(contentJson(MENU_R1_D29, MENU_R1_D28, MENU_R1_D27));
     }
 
     @Test
@@ -95,7 +95,7 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
     void addMenu() throws Exception {
         Menu expected = new Menu(null, null, "new dishes", 10, 99);
 
-        ResultActions action = mockMvc.perform(post(REST_URL + "/{restaurantId}", RESTAURANT_1_ID)
+        ResultActions action = mockMvc.perform(post(REST_URL + "/{restaurantId}/menus", RESTAURANT_1_ID)
             .with(userHttpBasic(ADMIN))
             .contentType(MediaType.APPLICATION_JSON)
             .content(writeValue(expected)))
@@ -106,7 +106,7 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
         expected.setActual(returned.getActual());
 
         assertMatch(returned, expected);
-        assertMatch(restaurantService.getAllMenusForRestaurant(RESTAURANT_1_ID), expected, MENU_R1_D28, MENU_R1_D27);
+        assertMatch(restaurantService.getAllMenusForRestaurant(RESTAURANT_1_ID), expected, MENU_R1_D29, MENU_R1_D28, MENU_R1_D27);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
         updated.setActual(actual);
         updated.setPriceInt(9999);
 
-        mockMvc.perform(put(REST_URL + "/{restaurantId}/{menuId}", RESTAURANT_1_ID, MENU_R1_D27.getId())
+        mockMvc.perform(put(REST_URL + "/{restaurantId}/menus/{menuId}", RESTAURANT_1_ID, MENU_R1_D27.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(ADMIN))
             .content(writeAdditionProps(updated, Map.of("restaurant", RESTAURANT_1, "actual", actual))))
@@ -129,12 +129,12 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
 
     @Test
     void deleteMenu() throws Exception {
-        mockMvc.perform(delete(REST_URL + "/{restaurantId}/{menuId}", RESTAURANT_1_ID, MENU_R1_D27.getId())
+        mockMvc.perform(delete(REST_URL + "/{restaurantId}/menus/{menuId}", RESTAURANT_1_ID, MENU_R1_D27.getId())
             .contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(ADMIN)))
             .andDo(print())
             .andExpect(status().isNoContent());
 
-        assertMatch(restaurantService.getAllMenusForRestaurant(RESTAURANT_1_ID), MENU_R1_D28);
+        assertMatch(restaurantService.getAllMenusForRestaurant(RESTAURANT_1_ID), MENU_R1_D29, MENU_R1_D28);
     }
 }

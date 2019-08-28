@@ -17,7 +17,7 @@ import static ru.javawebinar.topjava.graduation.UserTestData.USER;
 import static ru.javawebinar.topjava.graduation.model.AbstractBaseEntity.START_SEQ;
 
 public class VoteTestData {
-    public static final int VOTE_ID = START_SEQ + 8;
+    public static final int VOTE_ID = START_SEQ + 10;
 
     public static final LocalDateTime VOTE_DATE_TIME_NEW_BEFORE = LocalDateTime.of(2019, 6, 29, 10, 5);
     public static final LocalDateTime VOTE_DATE_TIME_NEW_AFTER = LocalDateTime.of(2019, 6, 29, 11, 5);

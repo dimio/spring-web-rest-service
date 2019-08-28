@@ -16,9 +16,11 @@ public class MenuTestData {
 
     public static final Menu MENU_R1_D27 = new Menu(MENU_ID, LocalDate.of(2019, 6, 27), "A, B", 99, 99);
     public static final Menu MENU_R1_D28 = new Menu(MENU_ID + 1, LocalDate.of(2019, 6, 28), "A, C", 101, 55);
+    public static final Menu MENU_R1_D29 = new Menu(MENU_ID + 2, LocalDate.of(2019, 6, 29), "A, D", 101, 55);
 
-    public static final Menu MENU_R2_D27 = new Menu(MENU_ID + 2, LocalDate.of(2019, 6, 27), "B, C", 100, 0);
-    public static final Menu MENU_R2_D28 = new Menu(MENU_ID + 3, LocalDate.of(2019, 6, 28), "B, D", 98, 30);
+    public static final Menu MENU_R2_D27 = new Menu(MENU_ID + 3, LocalDate.of(2019, 6, 27), "B, C", 100, 0);
+    public static final Menu MENU_R2_D28 = new Menu(MENU_ID + 4, LocalDate.of(2019, 6, 28), "B, D", 98, 30);
+    public static final Menu MENU_R2_D29 = new Menu(MENU_ID + 5, LocalDate.of(2019, 6, 29), "B, A", 98, 30);
 
     public static void assertMatch(Menu actual, Menu expected) {
         assertThat(actual).isEqualToIgnoringGivenFields(expected, "restaurant");

@@ -2,7 +2,6 @@ package ru.javawebinar.topjava.graduation.service;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Sort;
 import ru.javawebinar.topjava.graduation.model.Vote;
 
 import static ru.javawebinar.topjava.graduation.RestaurantTestData.*;
@@ -57,11 +56,6 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void getAllForRestaurant() {
         assertMatch(service.getAllForRestaurant(RESTAURANT_1_ID), USER_VOTE_1, ADMIN_VOTE_1, USER_VOTE_2);
-    }
-
-    @Test
-    void getAll() {
-        assertMatch(service.getAll(Sort.by(Sort.Direction.ASC, "user_id")), USER_VOTE_1, USER_VOTE_2, ADMIN_VOTE_1, ADMIN_VOTE_2);
     }
 
     @Test

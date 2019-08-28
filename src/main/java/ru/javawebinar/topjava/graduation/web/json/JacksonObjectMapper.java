@@ -35,6 +35,7 @@ public class JacksonObjectMapper extends ObjectMapper {
         //NOTE: it's not working
         // "JSON parse error: Invalid numeric value: Leading zeroes not allowed"
         // https://stackoverflow.com/questions/55795970/how-to-enable-allow-numeric-leading-zeros-feature-to-allow-leading-zeroes-in-j
+        // can be use menuTo with full price in string "XX.YY" and split it to XX and YY
         isEnabled(ALLOW_NUMERIC_LEADING_ZEROS);
     }
 

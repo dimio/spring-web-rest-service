@@ -7,36 +7,120 @@ FROM votes;
 DELETE
 FROM users;
 DELETE
-FROM restaurants;
+FROM meals;
 DELETE
 FROM menus;
-ALTER SEQUENCE global_seq RESTART WITH 100000;
+DELETE
+FROM restaurants;
+ALTER SEQUENCE GLOBAL_SEQ RESTART WITH 100000;
 
 INSERT INTO users (name, email, password)
 VALUES ('User', 'user@yandex.ru', '{noop}password'),
        ('Admin', 'admin@gmail.com', '{noop}admin');
 
 INSERT INTO user_roles (role, user_id)
-VALUES ('ROLE_USER', 100000),
-       ('ROLE_ADMIN', 100001),
-       ('ROLE_USER', 100001);
+-- ID's: 100000, 100001
+VALUES ('ROLE_USER', (SELECT ID FROM USERS WHERE NAME = 'User')),
+       ('ROLE_ADMIN', (SELECT ID FROM USERS WHERE NAME = 'Admin')),
+       ('ROLE_USER', (SELECT ID FROM USERS WHERE NAME = 'Admin'));
 
 INSERT INTO restaurants(name)
--- ID's: 100002, 100003
-VALUES ('McDownalds'),
-       ('Dock Clownalds');
+-- ID's: 100002, 100003, 100004
+VALUES ('Mc''Downalds'),
+       ('Dock Clownalds'),
+--        no menus for actual date
+       ('Not this time');
 
-INSERT INTO menus(restaurant_id, actual, dishes, price_int, price_fract)
-VALUES (100002, '2019-06-27', 'A, B', 99, 99),
-       (100002, '2019-06-28', 'A, C', 101, 55),
-       (100002, '2019-06-29', 'A, D', 101, 55),
+INSERT INTO menus(restaurant_id, actual)
+VALUES ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), '2019-06-27'),
+       ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), '2019-06-28'),
+       ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), now()),
 
-       (100003, '2019-06-27', 'B, C', 100, 00),
-       (100003, '2019-06-28', 'B, D', 98, 30),
-       (100003, '2019-06-29', 'B, A', 98, 30);
+       ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds'), '2019-06-27'),
+       ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds'), '2019-06-28'),
+       ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds'), now()),
+
+       ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Not this time'), '2019-06-27');
 
 INSERT INTO votes (user_id, restaurant_id, date)
-VALUES (100000, 100002, '2019-06-27'),
-       (100001, 100002, '2019-06-27'),
-       (100000, 100002, '2019-06-28'),
-       (100001, 100003, '2019-06-28');
+VALUES ((SELECT USERS.ID FROM USERS WHERE NAME = 'User'),
+        (SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), '2019-06-27'),
+       ((SELECT USERS.ID FROM USERS WHERE NAME = 'Admin'),
+        (SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), '2019-06-27'),
+       ((SELECT USERS.ID FROM USERS WHERE NAME = 'User'),
+        (SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), '2019-06-28'),
+       ((SELECT USERS.ID FROM USERS WHERE NAME = 'Admin'),
+        (SELECT ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds'), '2019-06-28'),
+       ((SELECT USERS.ID FROM USERS WHERE NAME = 'User'),
+        (SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), now()),
+       ((SELECT USERS.ID FROM USERS WHERE NAME = 'Admin'),
+        (SELECT ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds'), now());
+
+-- Mc'Downalds meals
+INSERT INTO meals (menu_id, name, price)
+VALUES ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds')
+           AND m.ACTUAL = '2019-06-27'), 'Big Muck', 10.96 * 100),
+       ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds')
+           AND m.ACTUAL = '2019-06-27'), 'Moo Duck', 5.75 * 100),
+       ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds')
+           AND m.ACTUAL = '2019-06-28'), 'Big Muck', 10.96 * 100),
+       ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds')
+           AND m.ACTUAL = '2019-06-28'), 'Glue Cola', 1.00 * 100),
+       ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds')
+           AND m.ACTUAL = current_date), 'Big Muck', 10.96 * 100),
+       ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds')
+           AND m.ACTUAL = current_date), 'What the Funk', 100.50 * 100);
+
+-- Dock Clownalds meals
+INSERT INTO meals (menu_id, name, price)
+VALUES ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds')
+           AND m.ACTUAL = '2019-06-27'), 'Burger', 2.96 * 100),
+       ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds')
+           AND m.ACTUAL = '2019-06-27'), 'Tea', 0.75 * 100),
+       ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds')
+           AND m.ACTUAL = '2019-06-28'), 'Coffee', 1.5 * 100),
+       ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds')
+           AND m.ACTUAL = '2019-06-28'), 'Sandwich', 3.00 * 100),
+       ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds')
+           AND m.ACTUAL = current_date), 'Soup', 8.96 * 100);
+
+-- Not this time meals
+INSERT INTO meals (menu_id, name, price)
+VALUES ((SELECT ID
+         FROM MENUS m
+         WHERE m.RESTAURANT_ID =
+               (SELECT RESTAURANTS.ID FROM RESTAURANTS WHERE NAME = 'Not this time')
+           AND m.ACTUAL = '2019-06-27'), 'Roast beef', 10.55 * 100);

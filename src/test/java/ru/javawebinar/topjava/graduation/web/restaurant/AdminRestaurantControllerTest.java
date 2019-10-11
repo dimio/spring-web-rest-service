@@ -113,7 +113,11 @@ public class AdminRestaurantControllerTest extends AbstractControllerTest {
     void updateMenu() throws Exception {
         Menu updated = new Menu(MENU_R1_D27);
         LocalDate actual = LocalDate.now();
+<<<<<<< Updated upstream
         updated.setDishes("Updated Dishes");
+=======
+        updated.setMeals("Updated Dishes");
+>>>>>>> Stashed changes
         updated.setActual(actual);
         updated.setPriceInt(9999);
 

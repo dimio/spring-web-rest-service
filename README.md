@@ -3,7 +3,8 @@ Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot
 
 ## REST API
 Base path: `localhost:8080/rest`
-Base path for this project (deployed into "topjava_graduation"): `localhost:8080/topjava_graduation/rest/`
+Base path for this project (deployed into application context "topjava_graduation"): `localhost:8080/topjava_graduation/rest/`
+Auto-generated API docs see in: http://localhost:8080/v3/api-docs/ (json) or http://localhost:8080/api-docs.yaml or http://localhost:8080/swagger-ui.html
 
 ### User
 Register a new user:

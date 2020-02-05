@@ -20,18 +20,18 @@ public class Meal extends AbstractNamedEntity {
   private Menu menu;
 
   @Column(name = "price", nullable = false)
-//  @Min(0)
   @Positive
   private int price;
 
   public Meal(){}
 
   public Meal(Meal m){
-    this(m.getId(), m.getName(), m.getPrice());
+    this(m.getId(), m.getName(), m.getMenu(), m.getPrice());
   }
 
-  public Meal(Integer id, String name, @Positive int price) {
+  public Meal(Integer id, String name, Menu menu, @Positive int price) {
     super(id, name);
+    this.menu = menu;
     this.price = price;
   }
 

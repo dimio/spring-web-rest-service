@@ -1,19 +1,18 @@
 package ru.javawebinar.topjava.graduation.model;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.BatchSize;
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
-import org.hibernate.validator.constraints.SafeHtml;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
-@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "actual", "dishes"}, name = "menus_unique_restaurant_actual_dishes_idx")})
+@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "actual"}, name = "menus_unique_restaurant_actual_idx")})
 @BatchSize(size = 200)
 public class Menu extends AbstractBaseEntity {
 
@@ -27,36 +26,27 @@ public class Menu extends AbstractBaseEntity {
     @Column(name = "actual", nullable = false, columnDefinition = "date default now()")
     private LocalDate actual = LocalDate.now();
 
-    @NotBlank
-    @Size(min = 1, max = 8000)
-    @SafeHtml
-    @Column(name = "dishes", nullable = false)
-    private String dishes;
-
-    @Column(name = "price_int", nullable = false)
-    private Integer priceInt;
-
-    @Column(name = "price_fract", nullable = false)
-    private Integer priceFract;
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu")
+    @BatchSize(size = 200)
+    @JsonManagedReference
+    private List<Meal> meals;
 
     public Menu() {
     }
 
     public Menu(Menu m) {
-        this(m.getId(), m.getActual(), m.getDishes(), m.getPriceInt(), m.getPriceFract());
+        this(m.getId(), m.getRestaurant(), m.getMeals(), m.getActual());
     }
 
-    public Menu(Integer id, String dishes, Integer priceInt, Integer priceFract) {
-        this(id, LocalDate.now(), dishes, priceInt, priceFract);
+    public Menu(Integer id, Restaurant restaurant, List<Meal> meals) {
+        this(id, restaurant, meals, LocalDate.now());
     }
 
-    public Menu(Integer id, LocalDate actual, String dishes, Integer priceInt, Integer priceFract) {
+    public Menu(Integer id, Restaurant restaurant, List<Meal> meals, LocalDate actual) {
         super(id);
-        //        setAdded(added);
+        this.restaurant = restaurant;
+        this.meals = meals;
         this.actual = actual;
-        this.dishes = dishes;
-        this.priceInt = priceInt;
-        this.priceFract = priceFract;
     }
 
     public Restaurant getRestaurant() {
@@ -73,41 +63,22 @@ public class Menu extends AbstractBaseEntity {
 
     public void setActual(LocalDate actual) {
         this.actual = actual;
-        //        this.added = (added == null) ? LocalDate.now() : added;
     }
 
-    public String getDishes() {
-        return dishes;
+    public List<Meal> getMeals() {
+        return meals;
     }
 
-    public void setDishes(String dishes) {
-        this.dishes = dishes;
-    }
-
-    public Integer getPriceInt() {
-        return priceInt;
-    }
-
-    public void setPriceInt(Integer priceInt) {
-        this.priceInt = priceInt;
-    }
-
-    public Integer getPriceFract() {
-        return priceFract;
-    }
-
-    public void setPriceFract(Integer priceFract) {
-        this.priceFract = priceFract;
+    public void setMeals(List<Meal> meal) {
+        this.meals = meal;
     }
 
     @Override
     public String toString() {
         return "Menu{" +
             "id=" + id +
+            ", restaurant=" + restaurant +
             ", actual=" + actual +
-            ", dishes='" + dishes + '\'' +
-            ", priceInt=" + priceInt +
-            ", priceFract=" + priceFract +
             '}';
     }
 }

@@ -15,7 +15,7 @@ public class Restaurant extends AbstractNamedEntity {
     @OrderBy("actual DESC")
     @BatchSize(size = 200)
     @JsonManagedReference
-    private List<Menu> lunchMenus;
+    private List<Menu> menus;
 
     public Restaurant() {
     }
@@ -24,21 +24,21 @@ public class Restaurant extends AbstractNamedEntity {
         super(id, name);
     }
 
-    public Restaurant(Integer id, String name, List<Menu> lunchMenus) {
+    public Restaurant(Integer id, String name, List<Menu> menus) {
         super(id, name);
-        this.lunchMenus = lunchMenus;
+        this.menus = menus;
     }
 
     public Restaurant(Restaurant r) {
-        this(r.getId(), r.getName(), r.getLunchMenus());
+        this(r.getId(), r.getName(), r.getMenus());
     }
 
-    public List<Menu> getLunchMenus() {
-        return lunchMenus;
+    public List<Menu> getMenus() {
+        return menus;
     }
 
-    public void setLunchMenus(List<Menu> lunchMenus) {
-        this.lunchMenus = lunchMenus;
+    public void setMenus(List<Menu> menus) {
+        this.menus = menus;
     }
 
     @Override

@@ -8,11 +8,16 @@
     <artifactId>topjava.graduation</artifactId>
     <packaging>war</packaging>
 
-    <version>0.0.1-SNAPSHOT</version>
+<!--    https://maven.apache.org/maven-ci-friendly.html-->
+    <version>${revision}${sha1}${changelist}</version>
 
     <name>Lunch vote manager</name>
 
     <properties>
+        <revision>0.0.2</revision>
+        <changelist>-SNAPSHOT</changelist>
+        <sha1/>
+
         <java.version>11</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
@@ -23,7 +28,6 @@
         <tomcat.version>9.0.19</tomcat.version>
 
         <!-- DB -->
-        <!--        <h2.version>RELEASE</h2.version>-->
         <hsqldb.version>RELEASE</hsqldb.version>
 
         <!-- Hibernate -->
@@ -165,17 +169,12 @@
         </dependency>
 
         <!-- DB -->
-        <!-- https://mvnrepository.com/artifact/com.h2database/h2 -->
-        <!--        <dependency>-->
-        <!--            <groupId>com.h2database</groupId>-->
-        <!--            <artifactId>h2</artifactId>-->
-        <!--        </dependency>-->
         <!-- https://mvnrepository.com/artifact/org.hsqldb/hsqldb -->
         <dependency>
             <groupId>org.hsqldb</groupId>
             <artifactId>hsqldb</artifactId>
             <version>${hsqldb.version}</version>
-            <!--            <scope>test</scope>-->
+            <!--<scope>test</scope>-->
         </dependency>
 
         <!--- ORM -->

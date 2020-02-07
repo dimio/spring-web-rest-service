@@ -33,17 +33,16 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     @Override
     List<Restaurant> findAll(Sort sort);
 
-    Restaurant findByName(String name);
+    Optional<Restaurant> findByName(String name);
 
     @EntityGraph(attributePaths = {"lunchMenus"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r WHERE r.id=?1")
-    Restaurant getWithMenus(Integer id);
+    Optional<Restaurant> getWithMenus(int id);
 
     @EntityGraph(attributePaths = {"votes"}, type = EntityGraph.EntityGraphType.LOAD)
     @Query("SELECT r FROM Restaurant r WHERE r.id=:id")
-    Restaurant getWithVotes(@Param("id") int id);
+    Optional<Restaurant> getWithVotes(@Param("id") int id);
 
-    //    @Query("SELECT DISTINCT r FROM Restaurant r LEFT JOIN FETCH r.lunchMenus m WHERE m.actual=:date ORDER BY r.name")
-    @Query("SELECT DISTINCT r FROM Restaurant r WHERE EXISTS (SELECT m FROM Menu m WHERE m.actual=:date) ORDER BY r.name")
-    List<Restaurant> getAllWithMenuForDate(@Param("date") LocalDate date);
+    @Query("SELECT r FROM Restaurant r JOIN r.menus m ON m.actual=:actual AND m.restaurant.id=r.id JOIN Meal m2 ON m2.menu.id=m.id ORDER BY r.name")
+    List<Restaurant> getAllWithMenusActualForDate(@Param("actual") LocalDate actual);
 }

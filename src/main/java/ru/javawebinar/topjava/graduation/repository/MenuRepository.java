@@ -20,20 +20,19 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Transactional
     Menu save(Menu menu);
 
-    @Modifying
     @Transactional
+    @Modifying
     @Query("DELETE FROM Menu m WHERE m.id=:id AND m.restaurant.id=:restaurantId")
     int delete(@Param("id") int id, @Param("restaurantId") int restaurantId);
 
     @Override
     Optional<Menu> findById(Integer id);
 
-    //getBetween and getAll
-    List<Menu> getByRestaurant_IdAndActualBetweenOrderByActualDesc(Integer restaurantId, LocalDate startDate, LocalDate endDate);
+    List<Menu> getByRestaurant_IdAndActual(int restaurantId, LocalDate actual);
 
     @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant WHERE m.id=:id AND m.restaurant.id=:restaurantId")
-    Menu getWithRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);
+    Optional<Menu> getWithRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);
 
     @Query("SELECT m FROM Menu m WHERE m.id=:id AND m.restaurant.id=:restaurantId")
-    Menu getForRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);
+    Optional<Menu> getForRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);
 }

@@ -23,9 +23,8 @@ public interface VoteRepository extends JpaRepository<Vote, Integer> {
     //equal to findByUserIdAndDate if dateFrom == dateTo
     List<Vote> findByUserIdAndDateBetween(int userId, @NotNull LocalDate dateFrom, @NotNull LocalDate dateTo);
 
-    List<Vote> findByRestaurantId(int restaurantId);
+    List<Vote> findAllByRestaurantId(int restaurantId);
 
     //equal to findByRestaurantIdAndDate if dateFrom == dateTo
-    List<Vote> findByRestaurantIdAndDateBetween(int restaurantId, LocalDate dateFrom, LocalDate dateTo);
-
+    List<Vote> findByRestaurantIdAndDateBetween(int restaurantId, @NotNull LocalDate dateFrom, @NotNull LocalDate dateTo);
 }

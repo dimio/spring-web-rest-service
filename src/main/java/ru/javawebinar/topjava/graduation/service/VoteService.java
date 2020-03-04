@@ -80,7 +80,7 @@ public class VoteService {
     }
 
     public List<Vote> getAllForRestaurant(Integer restaurantId) {
-        return voteRepository.findByRestaurantId(restaurantId);
+        return voteRepository.findAllByRestaurantId(restaurantId);
     }
 
     //voteRepository.findByUserIdAndDateBetween(date, date) is equal to findByUserIdAndDate

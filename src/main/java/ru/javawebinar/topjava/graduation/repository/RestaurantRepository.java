@@ -44,5 +44,5 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
     Optional<Restaurant> getWithVotes(@Param("id") int id);
 
     @Query("SELECT r FROM Restaurant r JOIN r.menus m ON m.actual=:actual AND m.restaurant.id=r.id JOIN Meal m2 ON m2.menu.id=m.id ORDER BY r.name")
-    List<Restaurant> getAllWithMenusActualForDate(@Param("actual") LocalDate actual);
+    List<Restaurant> getAllWithMenusForDate(@Param("actual") LocalDate actual);
 }

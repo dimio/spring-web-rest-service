@@ -28,7 +28,9 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Override
     Optional<Menu> findById(Integer id);
 
-    List<Menu> getByRestaurant_IdAndActual(int restaurantId, LocalDate actual);
+    List<Menu> getAllByRestaurant_Id(int restaurantId);
+
+    List<Menu> getByRestaurant_IdAndActual(int restaurantId, LocalDate date);
 
     @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant WHERE m.id=:id AND m.restaurant.id=:restaurantId")
     Optional<Menu> getWithRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);

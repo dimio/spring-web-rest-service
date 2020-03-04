@@ -4,8 +4,10 @@
     <!-- To enable JMX Management -->
     <jmxConfigurator/>
 
+    <!--    http://logback.qos.ch/manual/configuration.html#variableSubstitution-->
     <appender name="file" class="ch.qos.logback.core.FileAppender">
-        <file>${TOPJAVA_ROOT}/log/topjava_graduation.log</file>
+        <!--        <file>${TOPJAVA_ROOT}/log/topjava_graduation.log</file>-->
+        <file>log/topjava_graduation.log</file>
 
         <encoder>
             <charset>UTF-8</charset>
@@ -22,8 +24,9 @@
 
     <logger name="ru.javawebinar.topjava.graduation" level="debug"/>
     <logger name="org.springframework.web" level="debug"/>
-    <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver" level="debug"/>
-<!--    <logger name="org.springframework.security" level="debug"/>-->
+    <logger name="org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver"
+            level="debug"/>
+    <logger name="org.springframework.security" level="debug"/>
     <logger name="org.springframework.security.web.csrf.CsrfFilter" level="debug"/>
 
     <root level="info">

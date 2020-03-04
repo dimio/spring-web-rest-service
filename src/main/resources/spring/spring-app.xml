@@ -8,6 +8,10 @@
 
     <import resource="spring-security.xml"/>
 
-    <context:annotation-config/>
+    <!--    Annotation scanning work automatically with component-scan-->
+    <!--    Not necessary, already included with component-scan-->
+    <!--    <context:annotation-config/>-->
     <context:component-scan base-package="ru.javawebinar.**.service"/>
+    <!--    https://www.baeldung.com/properties-with-spring-->
+    <context:property-placeholder location="classpath:app.properties"/>
 </beans>

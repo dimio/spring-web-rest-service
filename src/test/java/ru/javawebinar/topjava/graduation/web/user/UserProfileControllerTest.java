@@ -21,26 +21,28 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static ru.javawebinar.topjava.graduation.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.graduation.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.graduation.UserTestData.*;
-import static ru.javawebinar.topjava.graduation.web.user.ProfileRestController.REST_URL;
+import static ru.javawebinar.topjava.graduation.web.user.UserProfileController.REST_URL;
 
-class ProfileRestControllerTest extends AbstractControllerTest {
+class UserProfileControllerTest extends AbstractControllerTest {
 
     @Autowired
     protected UserService userService;
 
     @Test
-    void testGet() throws Exception {
-        mockMvc.perform(get(REST_URL)
-            .with(userHttpBasic(USER)))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(contentJson(USER));
+    void testGetUnAuth() throws Exception {
+        mockMvc.perform(get(REST_URL))
+            .andDo(print())
+            .andExpect(status().isUnauthorized());
     }
 
     @Test
-    void testGetUnAuth() throws Exception {
-        mockMvc.perform(get(REST_URL))
-            .andExpect(status().isUnauthorized());
+    void testGet() throws Exception {
+        mockMvc.perform(get(REST_URL)
+            .with(userHttpBasic(USER)))
+            .andDo(print())
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(contentJson(USER));
     }
 
     @Test
@@ -55,7 +57,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     void testRegister() throws Exception {
         UserTo createdTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
 
-        ResultActions action = mockMvc.perform(post(REST_URL + "/register").contentType(MediaType.APPLICATION_JSON)
+        ResultActions action = mockMvc.perform(post(REST_URL + "/register")
+            .contentType(MediaType.APPLICATION_JSON)
             .content(JsonUtil.writeValue(createdTo)))
             .andDo(print())
             .andExpect(status().isCreated());
@@ -72,7 +75,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     void testUpdate() throws Exception {
         UserTo updatedTo = new UserTo(null, "newName", "newemail@ya.ru", "newPassword");
 
-        mockMvc.perform(put(REST_URL).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put(REST_URL)
+            .contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(USER))
             .content(JsonUtil.writeValue(updatedTo)))
             .andDo(print())
@@ -85,7 +89,8 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     @Transactional(propagation = Propagation.NEVER)
     void testDuplicate() throws Exception {
         UserTo updatedTo = new UserTo(null, "newName", "admin@gmail.com", "newPassword");
-        mockMvc.perform(put(REST_URL).contentType(MediaType.APPLICATION_JSON)
+        mockMvc.perform(put(REST_URL)
+            .contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(USER))
             .content(JsonUtil.writeValue(updatedTo)))
             .andExpect(status().isBadRequest())

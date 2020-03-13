@@ -32,6 +32,7 @@ VALUES ('Mc''Downalds'),
        ('Not this time');
 
 INSERT INTO menus(restaurant_id, actual)
+-- ID's: 100005..100011
 VALUES ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), '2019-06-27'),
        ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), '2019-06-28'),
        ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), now()),
@@ -43,6 +44,7 @@ VALUES ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), '2019-06-27'),
        ((SELECT ID FROM RESTAURANTS WHERE NAME = 'Not this time'), '2019-06-27');
 
 INSERT INTO votes (user_id, restaurant_id, date)
+-- ID's: 100012..100018
 VALUES ((SELECT USERS.ID FROM USERS WHERE NAME = 'User'),
         (SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), '2019-06-27'),
        ((SELECT USERS.ID FROM USERS WHERE NAME = 'Admin'),
@@ -54,7 +56,7 @@ VALUES ((SELECT USERS.ID FROM USERS WHERE NAME = 'User'),
        ((SELECT USERS.ID FROM USERS WHERE NAME = 'User'),
         (SELECT ID FROM RESTAURANTS WHERE NAME = 'Mc''Downalds'), now()),
        ((SELECT USERS.ID FROM USERS WHERE NAME = 'Admin'),
-        (SELECT ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds'), now());
+        (SELECT ID FROM RESTAURANTS WHERE NAME = 'Dock Clownalds'), '2020-03-03');
 
 -- Mc'Downalds meals
 INSERT INTO meals (menu_id, name, price)

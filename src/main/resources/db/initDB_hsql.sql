@@ -42,7 +42,7 @@ CREATE TABLE menus
     actual        DATE DEFAULT now() NOT NULL,
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id) ON DELETE CASCADE
 );
-CREATE UNIQUE INDEX menus_unique_restaurant_actual_idx ON menus (restaurant_id, actual);
+CREATE INDEX menus_restaurant_actual_idx ON menus (restaurant_id, actual);
 
 CREATE TABLE meals
 (
@@ -51,7 +51,7 @@ CREATE TABLE meals
     name    VARCHAR(8000) NOT NULL,
 --     in "kopecks"
     price   INT           NOT NULL,
-    FOREIGN KEY (menu_id) REFERENCES menus (id)
+    FOREIGN KEY (menu_id) REFERENCES menus (id) ON DELETE CASCADE
 );
 
 CREATE TABLE votes

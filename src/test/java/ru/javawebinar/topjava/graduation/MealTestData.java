@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.graduation;
 
+import org.springframework.test.web.servlet.ResultMatcher;
 import ru.javawebinar.topjava.graduation.model.Meal;
 
 import java.util.ArrayList;
@@ -7,6 +8,9 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static ru.javawebinar.topjava.graduation.TestUtil.readFromJsonMvcResult;
+import static ru.javawebinar.topjava.graduation.TestUtil.readListFromJsonMvcResult;
 import static ru.javawebinar.topjava.graduation.model.AbstractBaseEntity.START_SEQ;
 
 public class MealTestData {
@@ -41,4 +45,30 @@ public class MealTestData {
     //  R3: Not this time meals
     public static final Meal MEAL_R3_D27_1 = new Meal(MEAL_ID + 11, "Roast beef", 1055);
     public static final List<Meal> MEALS_R3_D27 = new ArrayList<>(Collections.singletonList(MEAL_R3_D27_1));
+
+
+    public static void assertMatch(Meal actual, Meal expected) {
+        assertThat(actual).isEqualTo(expected);
+    }
+
+    public static void assertMatch(Iterable<Meal> actual, Meal... expected) {
+        assertMatch(actual, List.of(expected));
+    }
+
+    public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
+        assertThat(actual).usingElementComparatorIgnoringFields("menu").isEqualTo(expected);
+    }
+
+    public static ResultMatcher contentJsonMeal(Meal... expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, Meal.class), List.of(expected));
+    }
+
+    public static ResultMatcher contentJsonMeal(Iterable<Meal> expected) {
+        return result -> assertMatch(readListFromJsonMvcResult(result, Meal.class), expected);
+    }
+
+    public static ResultMatcher contentJsonMeal(Meal expected) {
+        return result -> assertThat(readFromJsonMvcResult(result, Meal.class)).isEqualTo(expected);
+    }
+
 }

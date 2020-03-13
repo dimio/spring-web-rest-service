@@ -44,18 +44,18 @@ public class MenuTestData {
     }
 
     public static void assertMatch(Iterable<Menu> actual, Iterable<Menu> expected) {
-        assertThat(actual).usingElementComparatorIgnoringFields("restaurant").isEqualTo(expected);
+        assertThat(actual).usingElementComparatorIgnoringFields("meals").isEqualTo(expected);
     }
 
-    public static ResultMatcher contentJson(Menu... expected) {
+    public static ResultMatcher contentJsonMenu(Menu... expected) {
         return result -> assertMatch(readListFromJsonMvcResult(result, Menu.class), List.of(expected));
     }
 
-    public static ResultMatcher contentJson(Iterable<Menu> expected) {
+    public static ResultMatcher contentJsonMenu(Iterable<Menu> expected) {
         return result -> assertMatch(readListFromJsonMvcResult(result, Menu.class), expected);
     }
 
-    public static ResultMatcher contentJson(Menu expected) {
+    public static ResultMatcher contentJsonMenu(Menu expected) {
         return result -> assertMatch(readFromJsonMvcResult(result, Menu.class), expected);
     }
 }

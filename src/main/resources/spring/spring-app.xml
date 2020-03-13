@@ -13,5 +13,5 @@
     <!--    <context:annotation-config/>-->
     <context:component-scan base-package="ru.javawebinar.**.service"/>
     <!--    https://www.baeldung.com/properties-with-spring-->
-    <context:property-placeholder location="classpath:app.properties"/>
+    <context:property-placeholder location="classpath:app.properties, classpath:db/hsqldb.properties"/>
 </beans>

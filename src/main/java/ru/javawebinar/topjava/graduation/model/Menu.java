@@ -9,10 +9,12 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.List;
+import java.util.Set;
 
 @Entity
-@Table(name = "menus", uniqueConstraints = {@UniqueConstraint(columnNames = {"restaurant_id", "actual"}, name = "menus_unique_restaurant_actual_idx")})
+@Table(name = "menus",
+    indexes = {@Index(name = "menus_restaurant_actual_idx", columnList = "restaurant_id, actual")}
+)
 @BatchSize(size = 200)
 public class Menu extends AbstractBaseEntity {
 
@@ -26,10 +28,10 @@ public class Menu extends AbstractBaseEntity {
     @Column(name = "actual", nullable = false, columnDefinition = "date default now()")
     private LocalDate actual = LocalDate.now();
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "menu")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
     @BatchSize(size = 200)
     @JsonManagedReference
-    private List<Meal> meals;
+    private Set<Meal> meals;
 
     public Menu() {
     }
@@ -38,15 +40,15 @@ public class Menu extends AbstractBaseEntity {
         this(m.getId(), m.getRestaurant(), m.getMeals(), m.getActual());
     }
 
-    public Menu(Integer id, Restaurant restaurant, List<Meal> meals) {
+    public Menu(Integer id, Restaurant restaurant, Set<Meal> meals) {
         this(id, restaurant, meals, LocalDate.now());
     }
 
-    public Menu(Integer id, List<Meal> meals, LocalDate actual) {
-        this(id, null, meals, LocalDate.now());
+    public Menu(Integer id, Set<Meal> meals, LocalDate actual) {
+        this(id, null, meals, actual);
     }
 
-    public Menu(Integer id, Restaurant restaurant, List<Meal> meals, LocalDate actual) {
+    public Menu(Integer id, Restaurant restaurant, Set<Meal> meals, LocalDate actual) {
         super(id);
         this.restaurant = restaurant;
         this.meals = meals;
@@ -69,11 +71,11 @@ public class Menu extends AbstractBaseEntity {
         this.actual = actual;
     }
 
-    public List<Meal> getMeals() {
+    public Set<Meal> getMeals() {
         return meals;
     }
 
-    public void setMeals(List<Meal> meal) {
+    public void setMeals(Set<Meal> meal) {
         this.meals = meal;
     }
 

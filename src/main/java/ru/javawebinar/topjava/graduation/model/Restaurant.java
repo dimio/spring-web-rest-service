@@ -8,9 +8,20 @@ import java.util.List;
 
 @Entity
 @Table(name = "restaurants")
+@NamedEntityGraph(
+    name = "graph.Restaurant.menus",
+    attributeNodes = {
+        @NamedAttributeNode(value = "menus", subgraph = "graph.Restaurant.menus.meals")
+    },
+    subgraphs = {
+        @NamedSubgraph(
+            name = "graph.Restaurant.menus.meals",
+            attributeNodes = {@NamedAttributeNode("meals")}
+        )
+    }
+)
 public class Restaurant extends AbstractNamedEntity {
 
-    @Column
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
     @OrderBy("actual DESC")
     @BatchSize(size = 200)

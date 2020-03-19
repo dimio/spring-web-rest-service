@@ -1,7 +1,6 @@
 package ru.javawebinar.topjava.graduation.repository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -20,20 +19,12 @@ public interface MenuRepository extends JpaRepository<Menu, Integer> {
     @Transactional
     Menu save(Menu menu);
 
-    @Transactional
-    @Modifying
-    @Query("DELETE FROM Menu m WHERE m.id=:id AND m.restaurant.id=:restaurantId")
-    int delete(@Param("id") int id, @Param("restaurantId") int restaurantId);
-
     @Override
     Optional<Menu> findById(Integer id);
 
     List<Menu> getAllByRestaurant_Id(int restaurantId);
 
     List<Menu> getByRestaurant_IdAndActual(int restaurantId, LocalDate date);
-
-    @Query("SELECT m FROM Menu m JOIN FETCH m.restaurant WHERE m.id=:id AND m.restaurant.id=:restaurantId")
-    Optional<Menu> getWithRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);
 
     @Query("SELECT m FROM Menu m WHERE m.id=:id AND m.restaurant.id=:restaurantId")
     Optional<Menu> getForRestaurant(@Param("id") int id, @Param("restaurantId") int restaurantId);

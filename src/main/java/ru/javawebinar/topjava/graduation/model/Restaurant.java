@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonManagedReference;
 import org.hibernate.annotations.BatchSize;
 
 import javax.persistence.*;
-import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "restaurants")
@@ -23,10 +23,10 @@ import java.util.List;
 public class Restaurant extends AbstractNamedEntity {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "restaurant")
-    @OrderBy("actual DESC")
+    //    @OrderBy("actual DESC")
     @BatchSize(size = 200)
     @JsonManagedReference
-    private List<Menu> menus;
+    private Set<Menu> menus; //to Set
 
     public Restaurant() {
     }
@@ -35,7 +35,7 @@ public class Restaurant extends AbstractNamedEntity {
         super(id, name);
     }
 
-    public Restaurant(Integer id, String name, List<Menu> menus) {
+    public Restaurant(Integer id, String name, Set<Menu> menus) {
         super(id, name);
         this.menus = menus;
     }
@@ -44,11 +44,11 @@ public class Restaurant extends AbstractNamedEntity {
         this(r.getId(), r.getName(), r.getMenus());
     }
 
-    public List<Menu> getMenus() {
+    public Set<Menu> getMenus() {
         return menus;
     }
 
-    public void setMenus(List<Menu> menus) {
+    public void setMenus(Set<Menu> menus) {
         this.menus = menus;
     }
 

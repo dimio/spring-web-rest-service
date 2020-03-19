@@ -9,7 +9,7 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import java.time.LocalDate;
-import java.util.Set;
+import java.util.List;
 
 @Entity
 @Table(name = "menus",
@@ -31,7 +31,7 @@ public class Menu extends AbstractBaseEntity {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "menu")
     @BatchSize(size = 200)
     @JsonManagedReference
-    private Set<Meal> meals;
+    private List<Meal> meals;
 
     public Menu() {
     }
@@ -40,15 +40,15 @@ public class Menu extends AbstractBaseEntity {
         this(m.getId(), m.getRestaurant(), m.getMeals(), m.getActual());
     }
 
-    public Menu(Integer id, Restaurant restaurant, Set<Meal> meals) {
+    public Menu(Integer id, Restaurant restaurant, List<Meal> meals) {
         this(id, restaurant, meals, LocalDate.now());
     }
 
-    public Menu(Integer id, Set<Meal> meals, LocalDate actual) {
+    public Menu(Integer id, List<Meal> meals, LocalDate actual) {
         this(id, null, meals, actual);
     }
 
-    public Menu(Integer id, Restaurant restaurant, Set<Meal> meals, LocalDate actual) {
+    public Menu(Integer id, Restaurant restaurant, List<Meal> meals, LocalDate actual) {
         super(id);
         this.restaurant = restaurant;
         this.meals = meals;
@@ -71,11 +71,11 @@ public class Menu extends AbstractBaseEntity {
         this.actual = actual;
     }
 
-    public Set<Meal> getMeals() {
+    public List<Meal> getMeals() {
         return meals;
     }
 
-    public void setMeals(Set<Meal> meal) {
+    public void setMeals(List<Meal> meal) {
         this.meals = meal;
     }
 
@@ -85,6 +85,7 @@ public class Menu extends AbstractBaseEntity {
             "id=" + id +
             ", restaurant=" + restaurant +
             ", actual=" + actual +
+            ", meals=" + meals +
             '}';
     }
 }

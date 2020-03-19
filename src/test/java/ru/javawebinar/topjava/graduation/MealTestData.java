@@ -28,7 +28,7 @@ public class MealTestData {
 
     public static final Meal MEAL_R1_NOW_1 = new Meal(MEAL_ID + 4, "Big Muck", 1096);
     public static final Meal MEAL_R1_NOW_2 = new Meal(MEAL_ID + 5, "What the Funk", 10050);
-    public static final List<Meal> MEALS_R1_NOW = new ArrayList<>(Arrays.asList(MEAL_R1_NOW_1, MEAL_R1_NOW_2));
+    public static final List<Meal> MEALS_R1_NOW = new ArrayList<>(List.of(MEAL_R1_NOW_1, MEAL_R1_NOW_2));
 
     //  R2: Dock Clownalds meals
     public static final Meal MEAL_R2_D27_1 = new Meal(MEAL_ID + 6, "Burger", 296);
@@ -47,24 +47,24 @@ public class MealTestData {
     public static final List<Meal> MEALS_R3_D27 = new ArrayList<>(Collections.singletonList(MEAL_R3_D27_1));
 
 
-    public static void assertMatch(Meal actual, Meal expected) {
+    public static void assertMatchMeal(Meal actual, Meal expected) {
         assertThat(actual).isEqualTo(expected);
     }
 
-    public static void assertMatch(Iterable<Meal> actual, Meal... expected) {
-        assertMatch(actual, List.of(expected));
+    public static void assertMatchMeal(Iterable<Meal> actual, Meal... expected) {
+        assertMatchMeal(actual, List.of(expected));
     }
 
-    public static void assertMatch(Iterable<Meal> actual, Iterable<Meal> expected) {
+    public static void assertMatchMeal(Iterable<Meal> actual, Iterable<Meal> expected) {
         assertThat(actual).usingElementComparatorIgnoringFields("menu").isEqualTo(expected);
     }
 
     public static ResultMatcher contentJsonMeal(Meal... expected) {
-        return result -> assertMatch(readListFromJsonMvcResult(result, Meal.class), List.of(expected));
+        return result -> assertMatchMeal(readListFromJsonMvcResult(result, Meal.class), List.of(expected));
     }
 
     public static ResultMatcher contentJsonMeal(Iterable<Meal> expected) {
-        return result -> assertMatch(readListFromJsonMvcResult(result, Meal.class), expected);
+        return result -> assertMatchMeal(readListFromJsonMvcResult(result, Meal.class), expected);
     }
 
     public static ResultMatcher contentJsonMeal(Meal expected) {

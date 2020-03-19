@@ -3,6 +3,8 @@ package ru.javawebinar.topjava.graduation.web.vote;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.ResultActions;
+import ru.javawebinar.topjava.graduation.model.Vote;
 import ru.javawebinar.topjava.graduation.service.VoteService;
 import ru.javawebinar.topjava.graduation.web.AbstractControllerTest;
 
@@ -13,11 +15,12 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static ru.javawebinar.topjava.graduation.RestaurantTestData.RESTAURANT_1_ID;
-import static ru.javawebinar.topjava.graduation.RestaurantTestData.RESTAURANT_2_ID;
+import static ru.javawebinar.topjava.graduation.RestaurantTestData.*;
+import static ru.javawebinar.topjava.graduation.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.graduation.TestUtil.userHttpBasic;
-import static ru.javawebinar.topjava.graduation.UserTestData.ADMIN;
-import static ru.javawebinar.topjava.graduation.UserTestData.USER;
+import static ru.javawebinar.topjava.graduation.UserTestData.*;
+import static ru.javawebinar.topjava.graduation.VoteTestData.assertMatch;
+import static ru.javawebinar.topjava.graduation.VoteTestData.contentJson;
 import static ru.javawebinar.topjava.graduation.VoteTestData.*;
 import static ru.javawebinar.topjava.graduation.web.vote.UserVoteController.REST_URL;
 
@@ -32,13 +35,13 @@ class UserVoteControllerTest extends AbstractControllerTest {
             .andExpect(status().isUnauthorized());
     }
 
-    // FIXME: 13.03.2020 assert response
     @Test
     void getAllForYourself() throws Exception {
         mockMvc.perform(get(REST_URL)
             .with(userHttpBasic(USER)))
             .andDo(print())
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(contentJson(USER_VOTE_1, USER_VOTE_2, USER_VOTE_NOW));
     }
 
     @Test
@@ -113,35 +116,54 @@ class UserVoteControllerTest extends AbstractControllerTest {
 
     @Test
     void voteNewBeforeDecisionTime() throws Exception {
+        Vote expected = new Vote(null, VOTE_DATE_TIME_NEW_BEFORE.toLocalDate(), RESTAURANT_2, ADMIN);
         service.setClockAndTimeZone(VOTE_DATE_TIME_NEW_BEFORE);
-        mockMvc.perform(post(REST_URL + "/restaurant/{restaurantId}", RESTAURANT_2_ID)
+        ResultActions action = mockMvc.perform(post(REST_URL + "/restaurant/{restaurantId}", RESTAURANT_2_ID)
             .contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(ADMIN)))
             .andDo(print())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated());
+
+        Vote returned = readFromJson(action, Vote.class);
+        expected.setId(returned.getId());
+
+        assertMatch(returned, expected);
+        assertMatch(service.getForUserAndDate(ADMIN_ID, VOTE_DATE_TIME_NEW_BEFORE.toLocalDate()), expected);
     }
 
     @Test
     void voteNewAfterDecisionTime() throws Exception {
+        Vote expected = new Vote(null, VOTE_DATE_TIME_NEW_AFTER.toLocalDate(), RESTAURANT_3, ADMIN);
         service.setClockAndTimeZone(VOTE_DATE_TIME_NEW_AFTER);
-        mockMvc.perform(post(REST_URL + "/restaurant/{restaurantId}", RESTAURANT_2_ID)
+        ResultActions action = mockMvc.perform(post(REST_URL + "/restaurant/{restaurantId}", RESTAURANT_3_ID)
             .contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(ADMIN)))
             .andDo(print())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
             .andExpect(status().isCreated());
+
+        Vote returned = readFromJson(action, Vote.class);
+        expected.setId(returned.getId());
+
+        assertMatch(returned, expected);
+        assertMatch(service.getForUserAndDate(ADMIN_ID, VOTE_DATE_TIME_NEW_AFTER.toLocalDate()), expected);
     }
 
     @Test
     void voteUpdateBeforeDecisionTime() throws Exception {
+        Vote updated = new Vote(USER_VOTE_2);
+        updated.setRestaurant(RESTAURANT_2);
+        updated.setDate(VOTE_DATE_TIME_BEFORE.toLocalDate());
+
         service.setClockAndTimeZone(VOTE_DATE_TIME_BEFORE);
         mockMvc.perform(put(REST_URL + "/restaurant/{restaurantId}", RESTAURANT_2_ID)
             .contentType(MediaType.APPLICATION_JSON)
             .with(userHttpBasic(USER)))
             .andDo(print())
             .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(status().isOk());
+            .andExpect(status().isOk())
+            .andExpect(contentJson(updated));
     }
 
     @Test

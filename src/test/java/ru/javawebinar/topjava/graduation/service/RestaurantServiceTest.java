@@ -8,7 +8,6 @@ import ru.javawebinar.topjava.graduation.web.AbstractControllerTest;
 
 import java.time.LocalDate;
 
-import static org.assertj.core.api.Assertions.assertThat;
 import static ru.javawebinar.topjava.graduation.RestaurantTestData.*;
 
 class RestaurantServiceTest extends AbstractControllerTest {
@@ -55,23 +54,16 @@ class RestaurantServiceTest extends AbstractControllerTest {
             RESTAURANT_1, RESTAURANT_2, RESTAURANT_3);
     }
 
-    @Test
-    void getWithMenus() {
-        assertThat(service.getWithMenus(RESTAURANT_1_ID)).isEqualTo(RESTAURANT_1);
-    }
-
-    @Test
-    void getWithVotes() {
-        assertThat(service.getWithVotes(RESTAURANT_1_ID)).isEqualTo(RESTAURANT_1);
-    }
 
     @Test
     void getAllWithMenusForDate() {
-        assertMatchRestaurant(service.getAllWithMenusForDate(LocalDate.of(2019, 6, 27)), RESTAURANT_3, RESTAURANT_2, RESTAURANT_1);
+        assertMatchRestaurant(service
+                .getAllWithMenusAndMealsForDate(LocalDate.of(2019, 6, 27)),
+            RESTAURANT_1, RESTAURANT_2, RESTAURANT_3);
     }
 
     @Test
     void getAllWithActualMenus() {
-        assertMatchRestaurant(service.getAllWithMenusForDate(LocalDate.now()), RESTAURANT_2, RESTAURANT_1);
+        assertMatchRestaurant(service.getAllWithMenusAndMealsForDate(LocalDate.now()), RESTAURANT_1, RESTAURANT_2);
     }
 }

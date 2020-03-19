@@ -28,7 +28,7 @@ public class RestaurantService {
     }
 
     public void delete(int id) {
-        checkNotFoundWithId(id, restaurantRepository.delete(id));
+        checkNotFoundWithId(restaurantRepository.delete(id) != 0, id);
     }
 
     public void update(Restaurant restaurant) {
@@ -46,21 +46,11 @@ public class RestaurantService {
         return restaurantRepository.findByName(name).orElse(null);
     }
 
-    public Restaurant getWithMenus(Integer restaurantId) {
-        Assert.notNull(restaurantId, "restaurantId must be not null");
-        return restaurantRepository.getWithMenus(restaurantId).orElse(null);
-    }
-
-    public Restaurant getWithVotes(Integer restaurantId) {
-        Assert.notNull(restaurantId, "restaurantId must be not null");
-        return restaurantRepository.getWithVotes(restaurantId).orElse(null);
-    }
-
     public List<Restaurant> getAll(Sort sort) {
         return restaurantRepository.findAll(sort);
     }
 
-    public List<Restaurant> getAllWithMenusForDate(LocalDate date) {
-        return restaurantRepository.getAllWithMenusForDate(date);
+    public List<Restaurant> getAllWithMenusAndMealsForDate(LocalDate date) {
+        return restaurantRepository.findAllByMenus_Actual(date);
     }
 }

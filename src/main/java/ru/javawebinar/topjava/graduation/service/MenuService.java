@@ -11,6 +11,7 @@ import ru.javawebinar.topjava.graduation.repository.RestaurantRepository;
 import java.time.LocalDate;
 import java.util.List;
 
+import static ru.javawebinar.topjava.graduation.util.ValidationUtil.checkNotFound;
 import static ru.javawebinar.topjava.graduation.util.ValidationUtil.checkNotFoundWithId;
 
 @Service
@@ -34,13 +35,13 @@ public class MenuService {
     }
 
     public void delete(int restaurantId, int menuId) {
-        Assert.notNull(getForRestaurant(restaurantId, menuId), "menu not found");
+        checkNotFound(getForRestaurant(restaurantId, menuId), "menu not found");
         menuRepository.deleteById(menuId);
     }
 
     @Transactional
     public void update(int restaurantId, Menu menu) {
-        Assert.notNull(getForRestaurant(restaurantId, menu.getId()), "menu not found");
+        checkNotFound(getForRestaurant(restaurantId, menu.getId()), "menu not found");
         menu.setRestaurant(restaurantRepository.getOne(restaurantId));
         checkNotFoundWithId(menuRepository.save(menu), menu.getId());
     }
@@ -53,11 +54,13 @@ public class MenuService {
         return menu;
     }
 
-    public List<Menu> getForRestaurantAndDate(int restaurantId, LocalDate date) {
+    public List<Menu> getForRestaurantAndDate(Integer restaurantId, LocalDate date) {
+        Assert.notNull(restaurantId, "restaurantId must be not null");
         return menuRepository.getByRestaurant_IdAndActual(restaurantId, date);
     }
 
-    public List<Menu> getAllForRestaurant(int restaurantId) {
+    public List<Menu> getAllForRestaurant(Integer restaurantId) {
+        Assert.notNull(restaurantId, "restaurantId must be not null");
         return menuRepository.getAllByRestaurant_Id(restaurantId);
     }
 }

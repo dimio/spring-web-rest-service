@@ -35,15 +35,30 @@ public class MealService {
     }
 
     @Transactional
-    public Meal add(Integer menuId, Meal meal) {
+    public Meal add(int menuId, Meal meal) {
         Assert.notNull(meal, "meal must not be null");
         meal.setMenu(menuRepository.getOne(menuId));
         return mealRepository.save(meal);
     }
 
+    public void delete(Integer restaurantId, Integer menuId, Integer mealId) {
+        Assert.notNull(restaurantId, "restaurantId must be not null");
+        Assert.notNull(menuId, "menuId must be not null");
+        Assert.notNull(mealId, "mealId must be not null");
+        checkNotFound(menuRepository.getForRestaurant(menuId, restaurantId), "menu not found");
+        this.delete(menuId, mealId);
+    }
+
     public void delete(int menuId, int mealId) {
         checkNotFound(getForMenu(menuId, mealId), "meal not found"); //threw checkNotFoundWithId
         mealRepository.deleteById(mealId);
+    }
+
+    public void update(Integer restaurantId, Integer menuId, Meal meal) {
+        Assert.notNull(restaurantId, "restaurantId must be not null");
+        Assert.notNull(menuId, "menuId must be not null");
+        checkNotFound(menuRepository.getForRestaurant(menuId, restaurantId), "menu not found");
+        this.update(menuId, meal);
     }
 
     @Transactional

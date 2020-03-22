@@ -131,7 +131,7 @@ public class AdminRestaurantController {
         throws NotFoundException {
         log.info("update meal {} in a menu {} for a restaurant {}", meal, menuId, restaurantId);
         assureIdConsistent(meal, mealId);
-        mealService.update(menuId, meal);
+        mealService.update(restaurantId, menuId, meal);
     }
 
     @DeleteMapping(value = REST_URL_MEALS + "/{mealId}", consumes = MediaType.ALL_VALUE)
@@ -140,6 +140,6 @@ public class AdminRestaurantController {
                            @PathVariable int menuId,
                            @PathVariable int mealId) throws NotFoundException {
         log.info("delete a meal {} for a menu {} on a restaurant {}", mealId, menuId, restaurantId);
-        mealService.delete(menuId, mealId);
+        mealService.delete(restaurantId, menuId, mealId);
     }
 }

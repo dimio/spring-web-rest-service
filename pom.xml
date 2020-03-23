@@ -14,12 +14,12 @@
     <name>Lunch vote manager</name>
 
     <properties>
-        <revision>0.0.2</revision>
-        <changelist>-SNAPSHOT</changelist>
+        <revision>0.2.0</revision>
+        <changelist/>
         <sha1/>
 
         <logName>lunch_vm.log</logName>
-        <dbPath>~/lunch-vm/db/</dbPath>
+        <dbPath>${project.basedir}/db/</dbPath>
         <dbName>lunch_vm.db</dbName>
 
         <java.version>11</java.version>
@@ -29,7 +29,12 @@
         <spring.version>5.1.4.RELEASE</spring.version>
         <spring-data-jpa.version>[2.1.8,)</spring-data-jpa.version>
         <jackson-json.version>2.10.0.pr1</jackson-json.version>
-        <tomcat.version>9.0.19</tomcat.version>
+        <tomcat.version>9.0.33</tomcat.version>
+
+        <!-- Build -->
+        <cargo-maven2-plugin.version>1.7.11</cargo-maven2-plugin.version>
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
+        <maven-surefire-plugin.version>2.22.1</maven-surefire-plugin.version>
 
         <!-- DB -->
         <hsqldb.version>RELEASE</hsqldb.version>
@@ -60,7 +65,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.7.0</version>
+                <version>${maven-compiler-plugin.version}</version>
                 <configuration>
                     <source>${java.version}</source>
                     <target>${java.version}</target>
@@ -70,7 +75,7 @@
                 <!--https://junit.org/junit5/docs/current/user-guide/#running-tests-build-maven -->
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>2.22.1</version>
+                <version>${maven-surefire-plugin.version}</version>
                 <configuration>
                     <argLine>-Dfile.encoding=UTF-8</argLine>
                 </configuration>
@@ -78,10 +83,15 @@
             <plugin>
                 <groupId>org.codehaus.cargo</groupId>
                 <artifactId>cargo-maven2-plugin</artifactId>
-                <version>1.7.3</version>
+                <version>${cargo-maven2-plugin.version}</version>
                 <configuration>
                     <container>
                         <containerId>tomcat9x</containerId>
+                        <artifactInstaller>
+                            <groupId>org.apache.tomcat</groupId>
+                            <artifactId>tomcat</artifactId>
+                            <version>${tomcat.version}</version>
+                        </artifactInstaller>
                         <systemProperties>
                             <file.encoding>UTF-8</file.encoding>
                             <spring.profiles.active>tomcat</spring.profiles.active>

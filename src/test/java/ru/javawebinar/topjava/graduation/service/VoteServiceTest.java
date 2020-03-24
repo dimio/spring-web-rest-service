@@ -4,6 +4,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import ru.javawebinar.topjava.graduation.model.Vote;
 
+import javax.transaction.Transactional;
+import java.time.LocalDate;
+
 import static ru.javawebinar.topjava.graduation.RestaurantTestData.*;
 import static ru.javawebinar.topjava.graduation.UserTestData.*;
 import static ru.javawebinar.topjava.graduation.VoteTestData.assertMatch;
@@ -19,8 +22,7 @@ class VoteServiceTest extends AbstractServiceTest {
         Vote newVote = new Vote(null, VOTE_DATE_TIME_NEW_BEFORE.toLocalDate(), RESTAURANT_2, USER);
         service.setClockAndTimeZone(VOTE_DATE_TIME_NEW_BEFORE);
         newVote.setId(service.vote(USER_ID, RESTAURANT_2_ID).getId());
-        assertMatch(service.getForRestaurantAndDate(RESTAURANT_2_ID, VOTE_DATE_TIME_NEW_AFTER.toLocalDate()), newVote);
-
+        assertMatch(service.getForRestaurantAndDate(RESTAURANT_2_ID, VOTE_DATE_TIME_NEW_BEFORE.toLocalDate()), newVote);
     }
 
     @Test
@@ -32,6 +34,7 @@ class VoteServiceTest extends AbstractServiceTest {
     }
 
     @Test
+    @Transactional
     void voteUpdateBeforeDecisionTime() {
         Vote newVote = new Vote(null, VOTE_DATE_TIME_BEFORE.toLocalDate(), RESTAURANT_2, USER);
         service.setClockAndTimeZone(VOTE_DATE_TIME_BEFORE);
@@ -50,12 +53,13 @@ class VoteServiceTest extends AbstractServiceTest {
 
     @Test
     void getAllForUser() {
-        assertMatch(service.getAllForUser(USER_ID), USER_VOTE_1, USER_VOTE_2);
+        assertMatch(service.getAllForUser(USER_ID), USER_VOTE_1, USER_VOTE_2, USER_VOTE_NOW);
     }
 
     @Test
     void getAllForRestaurant() {
-        assertMatch(service.getAllForRestaurant(RESTAURANT_1_ID), USER_VOTE_1, ADMIN_VOTE_1, USER_VOTE_2);
+        assertMatch(service.getAllForRestaurant(RESTAURANT_1_ID),
+            USER_VOTE_1, ADMIN_VOTE_1, USER_VOTE_2, USER_VOTE_NOW);
     }
 
     @Test
@@ -66,5 +70,25 @@ class VoteServiceTest extends AbstractServiceTest {
     @Test
     void getForRestaurantAndDate() {
         assertMatch(service.getForRestaurantAndDate(RESTAURANT_2_ID, VOTE_DATE_TIME_AFTER.toLocalDate()), ADMIN_VOTE_2);
+    }
+
+    @Test
+    void getForRestaurantAndDateBetween() {
+        assertMatch(service.getForRestaurantAndDate(RESTAURANT_2_ID, VOTE_DATE_TIME_AFTER.toLocalDate(), LocalDate.now()),
+            ADMIN_VOTE_2, ADMIN_VOTE_3);
+    }
+
+    @Test
+    void deleteBeforeDecisionTime() {
+        service.setClockAndTimeZone(VOTE_DATE_TIME_BEFORE);
+        service.delete(USER_ID, VOTE_DATE_TIME_BEFORE.toLocalDate());
+        assertMatch(service.getAllForUser(USER_ID), USER_VOTE_1, USER_VOTE_NOW);
+    }
+
+    @Test
+    void deleteAfterDecisionTime() {
+        service.setClockAndTimeZone(VOTE_DATE_TIME_AFTER);
+        service.delete(USER_ID, VOTE_DATE_TIME_AFTER.toLocalDate());
+        assertMatch(service.getAllForUser(USER_ID), USER_VOTE_1, USER_VOTE_2, USER_VOTE_NOW);
     }
 }

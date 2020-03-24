@@ -31,6 +31,8 @@ public class Vote extends AbstractBaseEntity {
     @Column(name = "date", nullable = false, columnDefinition = "date default now()")
     private @NotNull LocalDate date = LocalDate.now();
 
+    private transient boolean isUpdated;
+
     public Vote() {
     }
 
@@ -39,18 +41,10 @@ public class Vote extends AbstractBaseEntity {
     }
 
     public Vote(Integer id, @NotNull LocalDate date, @NotNull Restaurant restaurant, @NotNull User user) {
-        this.id = id;
+        super(id);
         this.restaurant = restaurant;
         this.user = user;
         this.date = date;
-    }
-
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
     }
 
     public Restaurant getRestaurant() {
@@ -75,6 +69,14 @@ public class Vote extends AbstractBaseEntity {
 
     public void setDate(@NotNull LocalDate date) {
         this.date = date;
+    }
+
+    public boolean isUpdated() {
+        return isUpdated;
+    }
+
+    public void setUpdated(boolean updated) {
+        isUpdated = updated;
     }
 
     @Override

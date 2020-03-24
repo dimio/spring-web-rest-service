@@ -43,21 +43,23 @@ public class VoteService {
     Vote vote(Integer userId, Integer restaurantId, LocalDate date, LocalTime time) {
         Assert.notNull(userId, "userId must not be null");
         Assert.notNull(restaurantId, "restaurantId must not be null");
+        // NOTE: see Optional<T> findById(ID var1);
+        Restaurant restaurant = restaurantRepository.getOne(restaurantId);
         Vote vote = getForUserAndDate(userId, date);
         if (vote == null){
-            Restaurant restaurant = restaurantRepository.getOne(restaurantId);
-            //            if (!restaurantRepository.getAllWithMenuForDate(date).contains(restaurant)){
-            //                return null;
-            //            }
             return voteRepository.save(new Vote(null, date, restaurant, userRepository.getOne(userId)));
         }
         else {
             if (time.isBefore(DECISION_TIME)){
                 if (restaurantId.equals(vote.getRestaurant().getId())){
+                    vote.setUpdated(!vote.isNew()); //always true
                     return vote;
                 }
-                vote.setRestaurant(restaurantRepository.getOne(restaurantId));
-                return voteRepository.save(vote);
+                vote.setRestaurant(restaurant);
+                // FIXME: 11.03.2020 calling return voteRepository.save(vote); damage a transient field isUpdated
+                vote = voteRepository.save(vote);
+                vote.setUpdated(!vote.isNew()); //always true
+                return vote;
             }
             return null;
         }
@@ -80,18 +82,24 @@ public class VoteService {
     }
 
     public List<Vote> getAllForRestaurant(Integer restaurantId) {
-        return voteRepository.findByRestaurantId(restaurantId);
+        return voteRepository.findAllByRestaurantId(restaurantId);
     }
 
-    //voteRepository.findByUserIdAndDateBetween(date, date) is equal to findByUserIdAndDate
     public Vote getForUserAndDate(Integer userId, LocalDate date) {
         List<Vote> votes = voteRepository.findByUserIdAndDateBetween(userId, date, date);
         return votes.isEmpty() ? null : votes.get(votes.size() - 1);
     }
 
-    //make DateBetween for most universality?
-    public List<Vote> getForRestaurantAndDate(Integer restaurantId, LocalDate date) {
-        return voteRepository.findByRestaurantIdAndDateBetween(restaurantId, date, date);
+    public List<Vote> getForRestaurantAndDate(Integer restaurantId, LocalDate dateFrom, LocalDate dateTo) {
+        if (dateFrom.isEqual(dateTo)){
+            return this.getForRestaurantAndDate(restaurantId, dateFrom);
+        }
+        return (dateFrom.isAfter(dateTo)) ?
+            voteRepository.findByRestaurantIdAndDateBetween(restaurantId, dateTo, dateFrom) :
+            voteRepository.findByRestaurantIdAndDateBetween(restaurantId, dateFrom, dateTo);
     }
 
+    public List<Vote> getForRestaurantAndDate(Integer restaurantId, LocalDate date) {
+        return voteRepository.findByRestaurantIdAndDate(restaurantId, date);
+    }
 }

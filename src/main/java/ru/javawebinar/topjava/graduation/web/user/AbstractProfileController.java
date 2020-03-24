@@ -15,7 +15,7 @@ import java.util.List;
 import static ru.javawebinar.topjava.graduation.util.ValidationUtil.assureIdConsistent;
 import static ru.javawebinar.topjava.graduation.util.ValidationUtil.checkNew;
 
-public abstract class AbstractUserController {
+public abstract class AbstractProfileController {
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     @Autowired

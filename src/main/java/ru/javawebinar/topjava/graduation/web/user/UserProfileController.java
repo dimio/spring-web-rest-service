@@ -20,15 +20,15 @@ import java.net.URI;
 import static ru.javawebinar.topjava.graduation.util.ValidationUtil.checkNew;
 
 @RestController
-@RequestMapping(ProfileRestController.REST_URL)
-public class ProfileRestController extends AbstractUserController {
+@RequestMapping(UserProfileController.REST_URL)
+public class UserProfileController extends AbstractProfileController {
     static final String REST_URL = "/rest/profile";
 
     private final Logger log = LoggerFactory.getLogger(getClass());
 
     private final UserService service;
 
-    public ProfileRestController(UserService service) {
+    public UserProfileController(UserService service) {
         this.service = service;
     }
 
@@ -38,11 +38,9 @@ public class ProfileRestController extends AbstractUserController {
         log.info("Register {}", userTo);
         checkNew(userTo);
         User created = service.create(UserUtil.createNewFromTo(userTo));
-
         URI uriOfNewResource = ServletUriComponentsBuilder.fromCurrentContextPath()
             .path(REST_URL + "/{id}")
             .buildAndExpand(created.getId()).toUri();
-
         return ResponseEntity.created(uriOfNewResource).body(created);
     }
 

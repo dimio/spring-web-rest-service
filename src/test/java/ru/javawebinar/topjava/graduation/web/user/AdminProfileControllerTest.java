@@ -20,70 +20,59 @@ import static ru.javawebinar.topjava.graduation.TestUtil.readFromJson;
 import static ru.javawebinar.topjava.graduation.TestUtil.userHttpBasic;
 import static ru.javawebinar.topjava.graduation.UserTestData.*;
 
-class AdminRestControllerTest extends AbstractControllerTest {
+class AdminProfileControllerTest extends AbstractControllerTest {
 
     @Autowired
     protected UserService userService;
 
-    private static final String REST_URL = AdminRestController.REST_URL + '/';
+    private static final String REST_URL = AdminProfileController.REST_URL;
 
     @Test
-    void testGet() throws Exception {
-        mockMvc.perform(get(REST_URL + ADMIN_ID)
-            .with(userHttpBasic(ADMIN)))
-            .andExpect(status().isOk())
-            .andDo(print())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(contentJson(ADMIN));
-    }
-
-    @Test
-    void testGetByEmail() throws Exception {
-        mockMvc.perform(get(REST_URL + "by?email=" + ADMIN.getEmail())
-            .with(userHttpBasic(ADMIN)))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(contentJson(ADMIN));
-    }
-
-    @Test
-    void testDelete() throws Exception {
-        mockMvc.perform(delete(REST_URL + USER_ID)
-            .with(userHttpBasic(ADMIN)))
-            .andDo(print())
-            .andExpect(status().isNoContent());
-        assertMatch(userService.getAll(Sort.unsorted()), ADMIN);
-    }
-
-    @Test
-    void testGetUnAuth() throws Exception {
+    void getUnAuth() throws Exception {
         mockMvc.perform(get(REST_URL))
+            .andDo(print())
             .andExpect(status().isUnauthorized());
     }
 
     @Test
-    void testGetForbidden() throws Exception {
+    void getForbidden() throws Exception {
         mockMvc.perform(get(REST_URL)
             .with(userHttpBasic(USER)))
+            .andDo(print())
             .andExpect(status().isForbidden());
     }
 
     @Test
-    void testUpdate() throws Exception {
-        User updated = new User(USER);
-        updated.setName("UpdatedName");
-        updated.setRoles(Collections.singletonList(Role.ROLE_ADMIN));
-        mockMvc.perform(put(REST_URL + USER_ID)
-            .contentType(MediaType.APPLICATION_JSON)
-            .with(userHttpBasic(ADMIN))
-            .content(jsonWithPassword(updated, USER.getPassword())))
-            .andExpect(status().isNoContent());
-
-        assertMatch(userService.get(USER_ID), updated);
+    void getById() throws Exception {
+        mockMvc.perform(get(REST_URL + "/{id}", ADMIN_ID)
+            .with(userHttpBasic(ADMIN)))
+            .andExpect(status().isOk())
+            .andDo(print())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(contentJson(ADMIN));
     }
 
     @Test
-    void testCreate() throws Exception {
+    void getByEmail() throws Exception {
+        mockMvc.perform(get(REST_URL + "/by")
+            .param("email", ADMIN.getEmail())
+            .with(userHttpBasic(ADMIN)))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(contentJson(ADMIN));
+    }
+
+    @Test
+    void getAll() throws Exception {
+        mockMvc.perform(get(REST_URL)
+            .with(userHttpBasic(ADMIN)))
+            .andExpect(status().isOk())
+            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+            .andExpect(contentJson(USER, ADMIN));
+    }
+
+    @Test
+    void createWithLocation() throws Exception {
         User expected = new User(null, "New", "new@gmail.com", "newPass", Role.ROLE_USER, Role.ROLE_ADMIN);
         ResultActions action = mockMvc.perform(post(REST_URL)
             .contentType(MediaType.APPLICATION_JSON)
@@ -99,12 +88,25 @@ class AdminRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void testGetAll() throws Exception {
-        mockMvc.perform(get(REST_URL)
-            .with(userHttpBasic(ADMIN)))
-            .andExpect(status().isOk())
-            .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-            .andExpect(contentJson(USER, ADMIN));
+    void update() throws Exception {
+        User updated = new User(USER);
+        updated.setName("UpdatedName");
+        updated.setRoles(Collections.singletonList(Role.ROLE_ADMIN));
+        mockMvc.perform(put(REST_URL + "/{id}", USER_ID)
+            .contentType(MediaType.APPLICATION_JSON)
+            .with(userHttpBasic(ADMIN))
+            .content(jsonWithPassword(updated, USER.getPassword())))
+            .andExpect(status().isNoContent());
+
+        assertMatch(userService.get(USER_ID), updated);
     }
 
+    @Test
+    void deleteById() throws Exception {
+        mockMvc.perform(delete(REST_URL + "/{id}", USER_ID)
+            .with(userHttpBasic(ADMIN)))
+            .andDo(print())
+            .andExpect(status().isNoContent());
+        assertMatch(userService.getAll(Sort.unsorted()), ADMIN);
+    }
 }

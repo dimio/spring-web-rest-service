@@ -13,6 +13,7 @@ Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot
       - [Admin Profile API](#admin-profile-api)
       - [Admin Vote API](#admin-vote-api)
       - [Admin Restaurant API](#admin-restaurant-api)
+* [Requirements](#requirements)
 
 ## Install & Run
 
@@ -130,5 +131,12 @@ Base URL: `localhost:8080/lunch_vm/rest/admin`
 |/restaurants/{restaurantId}/menus/{menuId}/meals|POST|Add new menu item (meal) to menu|curl -w "\t%{http_code}\n" -s 'http://localhost:8080/lunch_vm/rest/admin/restaurants/100004/menus/100011/meals' -X POST -H 'Content-Type: application/json; charset=UTF-8' --user admin@gmail.com:admin -d '{"name":"Coffee Latte", "price":355}'|201|
 |/restaurants/{restaurantId}/menus/{menuId}/meals/{mealId}|PUT|Update menu item|curl -w "\t%{http_code}\n" -s http://localhost:8080/lunch_vm/rest/admin/restaurants/100004/menus/100011/meals/100029 -X PUT -H 'Content-Type: application/json; charset=UTF-8' --user admin@gmail.com:admin -d '{"name":"Coffee", "price":533}'|204|
 |/restaurants/{restaurantId}/menus/{menuId}/meals/{mealId}|DELETE|Delete menu item|curl -w "\t%{http_code}\n" -s http://localhost:8080/lunch_vm/rest/admin/restaurants/100004/menus/100011/meals/100029 -X DELETE --user admin@gmail.com:admin|204|
+
+<sub>[Back to ToC](#table-of-content)</sub>
+
+## Requirements
+
+* JDK 11 or later (you can use a free [Oracle OpenJDK](https://openjdk.java.net/) or another)
+* [Apache Maven](https://maven.apache.org/) for build and run the project
 
 <sub>[Back to ToC](#table-of-content)</sub>

@@ -1,4 +1,4 @@
-## Выпускной проект
+## Веб-сервис на основе Spring (REST-архитектура)
 
 Спроектировать и реализовать REST API с применением Hibernate/Spring/SpringMVC (или Spring-Boot) **без frontend**.
 

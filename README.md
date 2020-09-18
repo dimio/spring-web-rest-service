@@ -1,5 +1,5 @@
 # REST web service using Spring/Hibernate/Tomcat
-Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) without frontend. See more in expression of requirements: [graduation_en](/graduation_en.md) or [graduation_ru](/graduation_ru.md)
+Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot) without frontend. See more in expression of requirements: [spring-rest-service_en](/graduation_en.md) or [spring-rest-service_ru](/graduation_ru.md)
 
 ## Table of Content
 

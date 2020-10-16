@@ -19,7 +19,7 @@ Design and implement a REST API using Hibernate/Spring/SpringMVC (or Spring-Boot
 
 * See [Requirements](#requirements)
 * Clone this repository from git and go to app dir:\
-`git clone https://github.com/dimio/topjava_graduation.git lunch-vm`\
+`git clone https://github.com/dimio/spring-web-rest-service.git lunch-vm`\
 `cd lunch-vm`
 * For quick test: deploy it with maven (DB is stored in RAM)\
 `mvn clean package -P test cargo:run`\

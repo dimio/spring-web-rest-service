@@ -40,7 +40,7 @@
         <hsqldb.version>RELEASE</hsqldb.version>
 
         <!-- Hibernate -->
-        <hibernate.version>5.4.1.Final</hibernate.version>
+        <hibernate.version>5.4.24.Final</hibernate.version>
         <hibernate-validator.version>6.1.0.Final</hibernate-validator.version>
         <jsoup.version>1.11.3</jsoup.version>
 
